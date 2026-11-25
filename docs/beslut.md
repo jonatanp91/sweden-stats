@@ -102,3 +102,14 @@ alla inkomstskikt upp till 200 000 kr/mån i fyra tabeller och stoppar vid mer �
 Kalkylatorns andra steg fördelar kommunens/regionens/statens del proportionellt efter deras senaste budgetutfall.
 Skattereduktionerna redovisas som statens kostnad (kommunerna får hela kommunalskatten); blir statens netto negativt
 visas det som ett inflöde. Moms ingår inte (ägarens val).
+
+## B-014 Publicering på GitHub Pages (2026-11-25)
+
+Ägaren vill kunna se sajten från telefonen och varifrån som helst, och accepterar att den blir publik.
+**Beslut:** GitHub Pages via Actions (`.github/workflows/deploy.yml`): vid push till `main` körs tester,
+typkontroll och build, och `dist/` publiceras. `site` och `base` i `astro.config.mjs` sätts från miljövariablerna
+`SITE_URL`/`BASE_PATH` (som arbetsflödet tar från `actions/configure-pages`), så lokalt ligger sajten kvar i roten.
+Datan hämtas inte i arbetsflödet – den incheckade datan publiceras som den är.
+**Konsekvens:** Adressen blir `https://jonatanp91.github.io/sweden-stats/`. Från ett privat repo kräver Pages en
+betald GitHub-plan (annars måste repot göras publikt); sajten är publik oavsett repots synlighet (utom på Enterprise).
+Schemalagd datauppdatering är ett senare steg.
