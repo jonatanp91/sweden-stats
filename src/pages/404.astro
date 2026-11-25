@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+
+<Base title="Sidan finns inte">
+  <div class="container">
+    <h1>Sidan finns inte</h1>
+    <p class="lead">Sidan du letar efter finns inte, eller så har den flyttats.</p>
+    <p><a href={url()}>Till startsidan</a></p>
+  </div>
+</Base>

@@ -1,0 +1,341 @@
+{
+  "id": "skatter-region-flode",
+  "title": "Regionens budget: var pengarna kommer ifrån och vart de går",
+  "description": "Regionernas intäkter till vänster och kostnader per verksamhetsområde till höger. Hälso- och sjukvården dominerar.",
+  "category": "skatter",
+  "source": {
+    "org": "SCB",
+    "name": "Resultaträkning för regioner",
+    "url": "https://www.scb.se/OE0107/",
+    "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6784/data?lang=sv&outputFormat=json-stat2&valueCodes[Region]=*&valueCodes[Resultatraknposter]=010,022,030,035,040,060,072,080,120&valueCodes[ContentsCode]=*&valueCodes[Tid]=*",
+    "tableId": "TAB6784",
+    "license": "CC0 1.0 (SCB öppna data)",
+    "updated": "2026-08-28T06:00:00Z"
+  },
+  "extraSources": [
+    {
+      "org": "SCB",
+      "name": "Kostnader och intäkter för regioner efter verksamhetsområde",
+      "url": "https://www.scb.se/OE0107/",
+      "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4242/data?lang=sv&outputFormat=json-stat2&valueCodes[Region]=*&valueCodes[Verksomrkom]=1,0,2,4,3,7,5,6,8&valueCodes[ContentsCode]=000000A6&valueCodes[Tid]=*",
+      "tableId": "TAB4242",
+      "license": "CC0 1.0 (SCB öppna data)",
+      "updated": "2026-08-28T06:00:00Z"
+    }
+  ],
+  "fetchedAt": "2026-11-25T07:19:46.246Z",
+  "notes": [
+    "Bygger på regionens resultaträkning (exklusive regionala bolag). Alla belopp i löpande priser.",
+    "Verksamhetens kostnader fördelas efter respektive verksamhetsområdes andel av bruttokostnaderna. Serviceverksamheter (t.ex. fastighetsförvaltning och medicinsk service) är interna och fördelas därför inte som eget område.",
+    "Verksamhetens intäkter omfattar bl.a. patientavgifter, riktade statsbidrag (t.ex. för läkemedel) och försäljning av vård.",
+    "Region Gotland är både kommun och region; SCB uppskattar att 35 % av verksamheten avser regionuppgifter.",
+    "Mellansteget \"Hälso- och sjukvård\" omfattar SCB:s verksamhetsområden 0–4 (primärvård, somatisk och psykiatrisk specialistvård, tandvård, övrig hälso- och sjukvård). Avskrivningar och finansiella kostnader kan inte fördelas per verksamhet och redovisas under \"Övrig verksamhet och finansiering\".",
+    "Belopp per invånare beräknas med folkmängden den 31 december (summan av länets kommuner, SCB TAB6574)."
+  ],
+  "kind": "flow",
+  "unit": "mnkr",
+  "entityLabel": "Region",
+  "entityParam": "region",
+  "entities": [
+    {
+      "code": "00",
+      "name": "Alla regioner (riket)"
+    },
+    {
+      "code": "01L",
+      "name": "Region Stockholm"
+    },
+    {
+      "code": "03L",
+      "name": "Region Uppsala"
+    },
+    {
+      "code": "04L",
+      "name": "Region Sörmland"
+    },
+    {
+      "code": "05L",
+      "name": "Region Östergötland"
+    },
+    {
+      "code": "06L",
+      "name": "Region Jönköpings län"
+    },
+    {
+      "code": "07L",
+      "name": "Region Kronoberg"
+    },
+    {
+      "code": "08L",
+      "name": "Region Kalmar län"
+    },
+    {
+      "code": "0980L",
+      "name": "Region Gotland"
+    },
+    {
+      "code": "10L",
+      "name": "Region Blekinge"
+    },
+    {
+      "code": "12L",
+      "name": "Region Skåne"
+    },
+    {
+      "code": "13L",
+      "name": "Region Halland"
+    },
+    {
+      "code": "14L",
+      "name": "Västra Götalandsregionen"
+    },
+    {
+      "code": "17L",
+      "name": "Region Värmland"
+    },
+    {
+      "code": "18L",
+      "name": "Region Örebro län"
+    },
+    {
+      "code": "19L",
+      "name": "Region Västmanland"
+    },
+    {
+      "code": "20L",
+      "name": "Region Dalarna"
+    },
+    {
+      "code": "21L",
+      "name": "Region Gävleborg"
+    },
+    {
+      "code": "22L",
+      "name": "Region Västernorrland"
+    },
+    {
+      "code": "23L",
+      "name": "Region Jämtland Härjedalen"
+    },
+    {
+      "code": "24L",
+      "name": "Region Västerbotten"
+    },
+    {
+      "code": "25L",
+      "name": "Region Norrbotten"
+    }
+  ],
+  "defaultEntity": "00",
+  "years": [
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+  ],
+  "nodes": [
+    {
+      "id": "skatt",
+      "label": "Skatteintäkter",
+      "side": "in",
+      "description": "Kommunal- eller regionalskatt från invånarna"
+    },
+    {
+      "id": "statsbidrag",
+      "label": "Statsbidrag och utjämning",
+      "side": "in",
+      "description": "Generella statsbidrag och netto från det kommunalekonomiska utjämningssystemet"
+    },
+    {
+      "id": "verksamhetens-intakter",
+      "label": "Verksamhetens intäkter",
+      "side": "in",
+      "description": "Patientavgifter, riktade bidrag, försäljning m.m."
+    },
+    {
+      "id": "fin-in",
+      "label": "Finansiella intäkter",
+      "side": "in",
+      "description": "Räntor, utdelningar m.m."
+    },
+    {
+      "id": "extra-in",
+      "label": "Extraordinära intäkter",
+      "side": "in"
+    },
+    {
+      "id": "underskott",
+      "label": "Underskott",
+      "side": "in",
+      "role": "balance",
+      "description": "Årets negativa resultat"
+    },
+    {
+      "id": "g-halso",
+      "label": "Hälso- och sjukvård",
+      "side": "out",
+      "role": "group",
+      "description": "Primärvård, specialiserad somatisk och psykiatrisk vård, tandvård och övrig hälso- och sjukvård"
+    },
+    {
+      "id": "g-ovrigt",
+      "label": "Övrig verksamhet och finansiering",
+      "side": "out",
+      "role": "group",
+      "description": "Kollektivtrafik, regional utveckling, kultur och utbildning samt avskrivningar och finansiella kostnader"
+    },
+    {
+      "id": "r-somatisk",
+      "label": "Specialiserad somatisk vård",
+      "side": "out",
+      "parent": "g-halso",
+      "description": "Sjukhusvård och specialistmottagningar"
+    },
+    {
+      "id": "r-primarvard",
+      "label": "Primärvård",
+      "side": "out",
+      "parent": "g-halso",
+      "description": "Vårdcentraler m.m."
+    },
+    {
+      "id": "r-psykiatri",
+      "label": "Specialiserad psykiatrisk vård",
+      "side": "out",
+      "parent": "g-halso"
+    },
+    {
+      "id": "r-ovrig-hos",
+      "label": "Övrig hälso- och sjukvård",
+      "side": "out",
+      "parent": "g-halso",
+      "description": "Hjälpmedel, social verksamhet, FoU, politik avseende vård"
+    },
+    {
+      "id": "r-tandvard",
+      "label": "Tandvård",
+      "side": "out",
+      "parent": "g-halso"
+    },
+    {
+      "id": "r-trafik",
+      "label": "Trafik och infrastruktur",
+      "side": "out",
+      "parent": "g-ovrigt",
+      "description": "Kollektivtrafik, färdtjänst"
+    },
+    {
+      "id": "r-regional",
+      "label": "Utbildning, kultur och regional utveckling",
+      "side": "out",
+      "parent": "g-ovrigt",
+      "description": "Folkhögskolor, kultur, näringslivsutveckling"
+    },
+    {
+      "id": "verksamhet",
+      "label": "Verksamhetens kostnader (ej fördelade)",
+      "side": "out",
+      "description": "Driftredovisning per verksamhetsområde saknas för detta år"
+    },
+    {
+      "id": "avskrivningar",
+      "label": "Avskrivningar",
+      "side": "out",
+      "parent": "g-ovrigt",
+      "description": "Värdeminskning av anläggningar och inventarier"
+    },
+    {
+      "id": "fin-ut",
+      "label": "Finansiella kostnader",
+      "side": "out",
+      "parent": "g-ovrigt",
+      "description": "Räntor m.m."
+    },
+    {
+      "id": "utjamningsavgift",
+      "label": "Avgift till utjämningssystemet",
+      "side": "out",
+      "parent": "g-ovrigt",
+      "description": "Netto inbetalt till det kommunalekonomiska utjämningssystemet"
+    },
+    {
+      "id": "extra-ut",
+      "label": "Extraordinära kostnader",
+      "side": "out",
+      "parent": "g-ovrigt"
+    },
+    {
+      "id": "overskott",
+      "label": "Överskott",
+      "side": "out",
+      "role": "balance",
+      "description": "Årets positiva resultat"
+    }
+  ],
+  "keyFigures": [
+    {
+      "key": "skattesats-region",
+      "label": "Skattesats till regionen",
+      "unit": "%",
+      "decimals": 2
+    },
+    {
+      "key": "kostnader",
+      "label": "Totala kostnader",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "kostnad-per-inv",
+      "label": "Kostnader per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "skatteintakter",
+      "label": "Skatteintäkter",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "skatt-per-inv",
+      "label": "Skatteintäkter per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "statsbidrag",
+      "label": "Statsbidrag och utjämning (netto)",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "statsbidrag-per-inv",
+      "label": "Statsbidrag och utjämning per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "resultat",
+      "label": "Årets resultat",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "resultat-per-inv",
+      "label": "Årets resultat per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "folkmangd",
+      "label": "Folkmängd",
+      "unit": "inv.",
+      "decimals": 0
+    }
+  ],
+  "dataPath": "data/skatter-region-flode"
+}

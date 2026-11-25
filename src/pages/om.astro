@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import { sources } from '../data/sources';
+import { allDatasets } from '../lib/datasets';
+import { categoryBySlug } from '../data/categories';
+import { formatDate } from '../lib/format';
+import { url } from '../lib/url';
+
+const primary = sources.filter((s) => s.kind === 'primär');
+const references = sources.filter((s) => s.kind === 'referens');
+const datasets = allDatasets().sort((a, b) => a.category.localeCompare(b.category) || a.title.localeCompare(b.title));
+---
+
+<Base title="Om datan" description="Hur datan på Sverige i siffror tas fram, vilka källor som används och hur den uppdateras.">
+  <div class="container prose">
+    <h1>Om datan</h1>
+    <p class="lead">
+      Sverige i siffror är ett projekt för att göra officiell svensk statistik lätt att utforska. Allt som visas kommer från
+      myndigheter och andra officiella källor och kan spåras tillbaka till sitt ursprung.
+    </p>
+
+    <h2>Principer</h2>
+    <ul>
+      <li><strong>Endast officiella källor.</strong> Siffrorna hämtas från myndigheter som SCB, SMHI och Svenska kraftnät, aldrig från andrahandskällor.</li>
+      <li><strong>Spårbarhet.</strong> Varje diagram anger källa, tabell eller station, licens och datum då datan hämtades. Under diagrammet finns en länk till det exakta API-anropet.</li>
+      <li><strong>Öppenhet om bearbetning.</strong> Där datan bearbetats, till exempel summerats till helår eller slagits ihop i grupper, beskrivs det under "Om datan" vid diagrammet.</li>
+      <li><strong>Ladda ner själv.</strong> Varje diagram kan visas som tabell och laddas ner som CSV.</li>
+    </ul>
+
+    <h2>Hur datan hämtas</h2>
+    <p>
+      Hämtningsskript anropar källornas öppna API:er (bland annat SCB:s PxWebApi och SMHI:s öppna data), kontrollerar
+      resultatet och sparar det i versionshanterade filer. Sajten byggs sedan från dessa filer. Därför syns varje
+      förändring i datan i projektets historik.
+    </p>
+
+    <h2>Dataset</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dataset</th><th>Kategori</th><th>Källa</th><th>Hämtad</th></tr>
+        </thead>
+        <tbody>
+          {
+            datasets.map((d) => (
+              <tr>
+                <td><a href={url(`${d.category}/#${d.id}`)}>{d.title}</a></td>
+                <td>{categoryBySlug[d.category]?.name}</td>
+                <td><a href={d.source.url} target="_blank" rel="noopener">{d.source.org}</a>{d.source.tableId && <span class="muted"> · {d.source.tableId}</span>}</td>
+                <td class="nowrap">{formatDate(d.fetchedAt)}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Källor</h2>
+    <ul class="src-list">
+      {
+        primary.map((s) => (
+          <li>
+            <a href={s.url} target="_blank" rel="noopener">{s.name}</a>
+            <span class="muted">{s.description}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2>Inspiration och referenser</h2>
+    <p class="muted">
+      Följande organisationer gör bra sammanställningar som inspirerar projektet. Deras siffror visas inte här; i stället
+      hämtas motsvarande data från den officiella primärkällan.
+    </p>
+    <ul class="src-list">
+      {
+        references.map((s) => (
+          <li>
+            <a href={s.url} target="_blank" rel="noopener">{s.name}</a>
+            <span class="muted">{s.description}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .prose {
+    max-width: 860px;
+  }
+  .prose h2 {
+    margin-top: 36px;
+  }
+  .prose li {
+    margin-bottom: 8px;
+  }
+  .src-list {
+    list-style: none;
+    padding: 0;
+  }
+  .src-list li {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th,
+  td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--grid);
+    vertical-align: top;
+  }
+  thead th {
+    background: var(--surface-sunken);
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+  .nowrap {
+    white-space: nowrap;
+  }
+</style>

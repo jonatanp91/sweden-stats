@@ -1,0 +1,66 @@
+---
+/** Källhänvisning – obligatorisk under varje diagram (se CLAUDE.md § Principer). */
+import type { AnyDataset } from '../lib/types';
+import { formatDate } from '../lib/format';
+
+interface Props {
+  dataset: AnyDataset;
+}
+const { source, extraSources = [], fetchedAt } = Astro.props.dataset;
+const all = [source, ...extraSources];
+---
+
+<footer class="source">
+  {
+    all.map((s, i) => (
+      <span>
+        <strong>{i === 0 ? (all.length > 1 ? 'Källor:' : 'Källa:') : ''}</strong>
+        {i === 0 ? ' ' : <span class="indent" />}
+        <a href={s.url} target="_blank" rel="noopener">
+          {s.org}
+        </a>
+        {s.producer && ` (framtagen av ${s.producer})`}
+        {' – '}
+        {s.name}
+        {s.tableId && (
+          <>
+            {' · '}
+            <span class="id">{s.tableId}</span>
+          </>
+        )}
+        {s.apiUrl && (
+          <>
+            {' · '}
+            <a href={s.apiUrl} target="_blank" rel="noopener">
+              API-anrop
+            </a>
+          </>
+        )}
+      </span>
+    ))
+  }
+  <span>
+    Hämtad {formatDate(fetchedAt)}{source.updated && <> · uppdaterad hos källan {formatDate(source.updated)}</>} · {source.license}
+  </span>
+</footer>
+
+<style>
+  .source {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--grid);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .indent {
+    display: inline-block;
+    width: 3.4em;
+  }
+  .id {
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.95em;
+  }
+</style>

@@ -1,0 +1,117 @@
+---
+/**
+ * Nyckeltal: etikett, värde och valfri förändring mot en jämförelseperiod.
+ * Ex: <KeyFigure dataset="befolkning-folkmangd" series="folkmangd" label="Folkmängd" compare="previous" />
+ *     <KeyFigure dataset="utslapp-vaxthusgaser-sektor" series="total" compare="1990" compareMode="percent" upIsGood={false} />
+ */
+import { requireTimeSeries } from '../lib/datasets';
+import { getSeries, latestPoint, valueAt } from '../lib/series';
+import { formatNumber, formatPeriod, formatSigned } from '../lib/format';
+import { url } from '../lib/url';
+import { categoryBySlug } from '../data/categories';
+
+interface Props {
+  dataset: string;
+  /** Seriens key, eller 'total' för summan av alla serier. */
+  series: string;
+  label: string;
+  /** 'previous' = föregående period, 'year-ago' = samma period föregående år, annars en specifik period, t.ex. '1990'. */
+  compare?: 'previous' | 'year-ago' | string;
+  compareMode?: 'absolute' | 'percent';
+  /** Avgör om en ökning färgas som positiv eller negativ. Utelämna för neutral. */
+  upIsGood?: boolean;
+  decimals?: number;
+  unit?: string;
+}
+
+const { dataset: id, series: key, label, compare, compareMode = 'absolute', upIsGood, decimals, unit } = Astro.props;
+const ds = requireTimeSeries(id);
+const s = getSeries(ds, key);
+const latest = latestPoint(s);
+const dec = decimals ?? ds.chart.decimals ?? 0;
+
+let delta: { text: string; tone: 'good' | 'bad' | 'neutral'; arrow: string } | null = null;
+if (latest && compare) {
+  const idx = s.points.findIndex((p) => p.t === latest.t);
+  const refT =
+    compare === 'previous'
+      ? s.points[idx - 1]?.t
+      : compare === 'year-ago'
+        ? latest.t.replace(/^(\d{4})/, (y) => String(Number(y) - 1))
+        : compare;
+  const refV = refT ? valueAt(s, refT) : null;
+  if (refT && refV !== null && refV !== 0) {
+    const diff = latest.v - refV;
+    const text =
+      compareMode === 'percent'
+        ? `${formatSigned((diff / Math.abs(refV)) * 100, 0)} % sedan ${formatPeriod(refT)}`
+        : `${formatSigned(diff, dec)} sedan ${formatPeriod(refT)}`;
+    const tone = upIsGood === undefined || diff === 0 ? 'neutral' : diff > 0 === upIsGood ? 'good' : 'bad';
+    delta = { text, tone, arrow: diff > 0 ? '▲' : diff < 0 ? '▼' : '' };
+  }
+}
+const category = categoryBySlug[ds.category];
+---
+
+<a class="kf card" href={url(`${ds.category}/#${ds.id}`)}>
+  <span class="kf__label">{label}</span>
+  <span class="kf__value">
+    {latest ? formatNumber(latest.v, dec) : '–'}{' '}
+    <span class="kf__unit">{unit ?? ds.unit}</span>
+  </span>
+  {
+    delta && (
+      <span class:list={['kf__delta', `kf__delta--${delta.tone}`]}>
+        <span aria-hidden="true">{delta.arrow}</span> {delta.text}
+      </span>
+    )
+  }
+  <span class="kf__meta">{latest && formatPeriod(latest.t)} · {ds.source.org} · {category?.name}</span>
+</a>
+
+<style>
+  .kf {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 18px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+  .kf:hover {
+    border-color: var(--accent);
+  }
+  .kf__label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  .kf__value {
+    font-size: 1.75rem;
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .kf__unit {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0;
+  }
+  .kf__delta {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .kf__delta--good {
+    color: var(--good);
+  }
+  .kf__delta--bad {
+    color: var(--bad);
+  }
+  .kf__meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: auto;
+  }
+</style>

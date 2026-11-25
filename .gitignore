@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+.DS_Store
+*.log
+# Rådata/cache från hämtningsskript (den bearbetade datan i src/data/datasets/ ska checkas in)
+.cache/

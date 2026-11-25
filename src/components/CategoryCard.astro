@@ -1,0 +1,54 @@
+---
+import type { Category } from '../data/categories';
+import { url } from '../lib/url';
+
+interface Props {
+  category: Category;
+}
+const { category } = Astro.props;
+const count = category.datasets.length;
+---
+
+<a class="cat card" href={url(`${category.slug}/`)}>
+  <span class="cat__top">
+    <h3>{category.name}</h3>
+    {
+      count > 0 ? (
+        <span class="pill pill--active">
+          {count} diagram
+        </span>
+      ) : (
+        <span class="pill">Planerad</span>
+      )
+    }
+  </span>
+  <p>{category.description}</p>
+</a>
+
+<style>
+  .cat {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .cat:hover {
+    border-color: var(--accent);
+  }
+  .cat__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  h3 {
+    margin: 0 0 6px;
+  }
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+</style>

@@ -1,0 +1,1737 @@
+{
+  "id": "skatter-kommun-flode",
+  "title": "Kommunens budget: var pengarna kommer ifrån och vart de går",
+  "description": "Kommunens intäkter till vänster och kostnader per verksamhetsområde till höger. Välj en kommun eller se alla kommuner sammantaget.",
+  "category": "skatter",
+  "source": {
+    "org": "SCB",
+    "name": "Resultaträkning för kommuner",
+    "url": "https://www.scb.se/OE0107/",
+    "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6777/data?lang=sv&outputFormat=json-stat2&valueCodes[Region]=00,0114,0115,0117,0120,0123,0125,0126,0127,0128,0136,0138,0139,0140,0160,0162,0163,0180,0181,0182,0183,0184,0186,0187,0188,0191,0192,0305,0319,0330,0331,0360,0380,0381,0382,0428,0461,0480,0481,0482,0483,0484,0486,0488,0509,0512,0513,0560,0561,0562,0563,0580,0581,0582,0583,0584,0586,0604,0617,0642,0643,0662,0665,0680,0682,0683,0684,0685,0686,0687,0760,0761,0763,0764,0765,0767,0780,0781,0821,0834,0840,0860,0861,0862,0880,0881,0882,0883,0884,0885,0980,1060,1080,1081,1082,1083,1214,1230,1231,1233,1256,1257,1260,1261,1262,1263,1264,1265,1266,1267,1270,1272,1273,1275,1276,1277,1278,1280,1281,1282,1283,1284,1285,1286,1287,1290,1291,1292,1293,1315,1380,1381,1382,1383,1384,1401,1402,1407,1415,1419,1421,1427,1430,1435,1438,1439,1440,1441,1442,1443,1444,1445,1446,1447,1452,1460,1461,1462,1463,1465,1466,1470,1471,1472,1473,1480,1481,1482,1484,1485,1486,1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1497,1498,1499,1715,1730,1737,1760,1761,1762,1763,1764,1765,1766,1780,1781,1782,1783,1784,1785,1814,1860,1861,1862,1863,1864,1880,1881,1882,1883,1884,1885,1904,1907,1960,1961,1962,1980,1981,1982,1983,1984,2021,2023,2026,2029,2031,2034,2039,2061,2062,2080,2081,2082,2083,2084,2085,2101,2104,2121,2132,2161,2180,2181,2182,2183,2184,2260,2262,2280,2281,2282,2283,2284,2303,2305,2309,2313,2321,2326,2361,2380,2401,2403,2404,2409,2417,2418,2421,2422,2425,2460,2462,2463,2480,2481,2482,2505,2506,2510,2513,2514,2518,2521,2523,2560,2580,2581,2582,2583,2584&valueCodes[Resultatraknposter]=010,022,030,035,040,060,072,080,120&valueCodes[ContentsCode]=*&valueCodes[Tid]=*",
+    "tableId": "TAB6777",
+    "license": "CC0 1.0 (SCB öppna data)",
+    "updated": "2026-08-28T06:00:00Z"
+  },
+  "extraSources": [
+    {
+      "org": "SCB",
+      "name": "Verksamhetsintäkter för kommuner",
+      "url": "https://www.scb.se/OE0107/",
+      "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4201/data?lang=sv&outputFormat=json-stat2&valueCodes[Region]=00,0114,0115,0117,0120,0123,0125,0126,0127,0128,0136,0138,0139,0140,0160,0162,0163,0180,0181,0182,0183,0184,0186,0187,0188,0191,0192,0305,0319,0330,0331,0360,0380,0381,0382,0428,0461,0480,0481,0482,0483,0484,0486,0488,0509,0512,0513,0560,0561,0562,0563,0580,0581,0582,0583,0584,0586,0604,0617,0642,0643,0662,0665,0680,0682,0683,0684,0685,0686,0687,0760,0761,0763,0764,0765,0767,0780,0781,0821,0834,0840,0860,0861,0862,0880,0881,0882,0883,0884,0885,0980,1060,1080,1081,1082,1083,1214,1230,1231,1233,1256,1257,1260,1261,1262,1263,1264,1265,1266,1267,1270,1272,1273,1275,1276,1277,1278,1280,1281,1282,1283,1284,1285,1286,1287,1290,1291,1292,1293,1315,1380,1381,1382,1383,1384,1401,1402,1407,1415,1419,1421,1427,1430,1435,1438,1439,1440,1441,1442,1443,1444,1445,1446,1447,1452,1460,1461,1462,1463,1465,1466,1470,1471,1472,1473,1480,1481,1482,1484,1485,1486,1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1497,1498,1499,1715,1730,1737,1760,1761,1762,1763,1764,1765,1766,1780,1781,1782,1783,1784,1785,1814,1860,1861,1862,1863,1864,1880,1881,1882,1883,1884,1885,1904,1907,1960,1961,1962,1980,1981,1982,1983,1984,2021,2023,2026,2029,2031,2034,2039,2061,2062,2080,2081,2082,2083,2084,2085,2101,2104,2121,2132,2161,2180,2181,2182,2183,2184,2260,2262,2280,2281,2282,2283,2284,2303,2305,2309,2313,2321,2326,2361,2380,2401,2403,2404,2409,2417,2418,2421,2422,2425,2460,2462,2463,2480,2481,2482,2505,2506,2510,2513,2514,2518,2521,2523,2560,2580,2581,2582,2583,2584&valueCodes[Kontopost]=290,490,590,390,130&valueCodes[ContentsCode]=*&valueCodes[Tid]=*",
+      "tableId": "TAB4201",
+      "license": "CC0 1.0 (SCB öppna data)",
+      "updated": "2026-08-28T06:00:00Z"
+    },
+    {
+      "org": "SCB",
+      "name": "Kostnader och intäkter för kommuner efter verksamhetsområde",
+      "url": "https://www.scb.se/OE0107/",
+      "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4199/data?lang=sv&outputFormat=json-stat2&valueCodes[Region]=00,0114,0115,0117,0120,0123,0125,0126,0127,0128,0136,0138,0139,0140,0160,0162,0163,0180,0181,0182,0183,0184,0186,0187,0188,0191,0192,0305,0319,0330,0331,0360,0380,0381,0382,0428,0461,0480,0481,0482,0483,0484,0486,0488,0509,0512,0513,0560,0561,0562,0563,0580,0581,0582,0583,0584,0586,0604,0617,0642,0643,0662,0665,0680,0682,0683,0684,0685,0686,0687,0760,0761,0763,0764,0765,0767,0780,0781,0821,0834,0840,0860,0861,0862,0880,0881,0882,0883,0884,0885,0980,1060,1080,1081,1082,1083,1214,1230,1231,1233,1256,1257,1260,1261,1262,1263,1264,1265,1266,1267,1270,1272,1273,1275,1276,1277,1278,1280,1281,1282,1283,1284,1285,1286,1287,1290,1291,1292,1293,1315,1380,1381,1382,1383,1384,1401,1402,1407,1415,1419,1421,1427,1430,1435,1438,1439,1440,1441,1442,1443,1444,1445,1446,1447,1452,1460,1461,1462,1463,1465,1466,1470,1471,1472,1473,1480,1481,1482,1484,1485,1486,1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1497,1498,1499,1715,1730,1737,1760,1761,1762,1763,1764,1765,1766,1780,1781,1782,1783,1784,1785,1814,1860,1861,1862,1863,1864,1880,1881,1882,1883,1884,1885,1904,1907,1960,1961,1962,1980,1981,1982,1983,1984,2021,2023,2026,2029,2031,2034,2039,2061,2062,2080,2081,2082,2083,2084,2085,2101,2104,2121,2132,2161,2180,2181,2182,2183,2184,2260,2262,2280,2281,2282,2283,2284,2303,2305,2309,2313,2321,2326,2361,2380,2401,2403,2404,2409,2417,2418,2421,2422,2425,2460,2462,2463,2480,2481,2482,2505,2506,2510,2513,2514,2518,2521,2523,2560,2580,2581,2582,2583,2584&valueCodes[Verksomrkom]=490,590,290,890,390,690,190&valueCodes[ContentsCode]=0000005Z&valueCodes[Tid]=*",
+      "tableId": "TAB4199",
+      "license": "CC0 1.0 (SCB öppna data)",
+      "updated": "2026-08-28T06:00:00Z"
+    }
+  ],
+  "fetchedAt": "2026-11-25T07:19:46.246Z",
+  "notes": [
+    "Bygger på kommunens resultaträkning (exklusive kommunala bolag). Alla belopp i löpande priser.",
+    "Verksamhetens kostnader fördelas på verksamhetsområden efter respektive områdes andel av bruttokostnaderna i driftredovisningen. Driftredovisningen innehåller interna poster och summerar därför inte exakt till resultaträkningen; andelarna används bara för fördelningen.",
+    "Verksamhetens intäkter delas upp enligt SCB:s kontoposter; det som inte ryms i de redovisade grupperna visas som \"Övriga verksamhetsintäkter\". I de få fall där kontoposterna summerar till mer än resultaträkningens intäkter (främst Region Gotland, som redovisar både kommun- och regionuppgifter) skalas uppdelningen proportionellt.",
+    "Kommuner som betalar netto till det kommunalekonomiska utjämningssystemet visar en \"Avgift till utjämningssystemet\" bland utgifterna.",
+    "Ett överskott (eller underskott) balanserar flödet så att intäkter och kostnader blir lika stora.",
+    "Belopp per invånare beräknas med folkmängden den 31 december samma år (SCB TAB6574). Nyckeltalen är desamma som i kartan ovan."
+  ],
+  "kind": "flow",
+  "unit": "mnkr",
+  "entityLabel": "Kommun",
+  "entityParam": "kommun",
+  "entities": [
+    {
+      "code": "00",
+      "name": "Alla kommuner (riket)"
+    },
+    {
+      "code": "0114",
+      "name": "Upplands Väsby",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0115",
+      "name": "Vallentuna",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0117",
+      "name": "Österåker",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0120",
+      "name": "Värmdö",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0123",
+      "name": "Järfälla",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0125",
+      "name": "Ekerö",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0126",
+      "name": "Huddinge",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0127",
+      "name": "Botkyrka",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0128",
+      "name": "Salem",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0136",
+      "name": "Haninge",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0138",
+      "name": "Tyresö",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0139",
+      "name": "Upplands-Bro",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0140",
+      "name": "Nykvarn",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0160",
+      "name": "Täby",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0162",
+      "name": "Danderyd",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0163",
+      "name": "Sollentuna",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0180",
+      "name": "Stockholm",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0181",
+      "name": "Södertälje",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0182",
+      "name": "Nacka",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0183",
+      "name": "Sundbyberg",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0184",
+      "name": "Solna",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0186",
+      "name": "Lidingö",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0187",
+      "name": "Vaxholm",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0188",
+      "name": "Norrtälje",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0191",
+      "name": "Sigtuna",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0192",
+      "name": "Nynäshamn",
+      "group": "Stockholms län"
+    },
+    {
+      "code": "0305",
+      "name": "Håbo",
+      "group": "Uppsala län"
+    },
+    {
+      "code": "0319",
+      "name": "Älvkarleby",
+      "group": "Uppsala län"
+    },
+    {
+      "code": "0330",
+      "name": "Knivsta",
+      "group": "Uppsala län"
+    },
+    {
+      "code": "0331",
+      "name": "Heby",
+      "group": "Uppsala län"
+    },
+    {
+      "code": "0360",
+      "name": "Tierp",
+      "group": "Uppsala län"
+    },
+    {
+      "code": "0380",
+      "name": "Uppsala",
+      "group": "Uppsala län"
+    },
+    {
+      "code": "0381",
+      "name": "Enköping",
+      "group": "Uppsala län"
+    },
+    {
+      "code": "0382",
+      "name": "Östhammar",
+      "group": "Uppsala län"
+    },
+    {
+      "code": "0428",
+      "name": "Vingåker",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0461",
+      "name": "Gnesta",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0480",
+      "name": "Nyköping",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0481",
+      "name": "Oxelösund",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0482",
+      "name": "Flen",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0483",
+      "name": "Katrineholm",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0484",
+      "name": "Eskilstuna",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0486",
+      "name": "Strängnäs",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0488",
+      "name": "Trosa",
+      "group": "Södermanlands län"
+    },
+    {
+      "code": "0509",
+      "name": "Ödeshög",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0512",
+      "name": "Ydre",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0513",
+      "name": "Kinda",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0560",
+      "name": "Boxholm",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0561",
+      "name": "Åtvidaberg",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0562",
+      "name": "Finspång",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0563",
+      "name": "Valdemarsvik",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0580",
+      "name": "Linköping",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0581",
+      "name": "Norrköping",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0582",
+      "name": "Söderköping",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0583",
+      "name": "Motala",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0584",
+      "name": "Vadstena",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0586",
+      "name": "Mjölby",
+      "group": "Östergötlands län"
+    },
+    {
+      "code": "0604",
+      "name": "Aneby",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0617",
+      "name": "Gnosjö",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0642",
+      "name": "Mullsjö",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0643",
+      "name": "Habo",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0662",
+      "name": "Gislaved",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0665",
+      "name": "Vaggeryd",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0680",
+      "name": "Jönköping",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0682",
+      "name": "Nässjö",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0683",
+      "name": "Värnamo",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0684",
+      "name": "Sävsjö",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0685",
+      "name": "Vetlanda",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0686",
+      "name": "Eksjö",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0687",
+      "name": "Tranås",
+      "group": "Jönköpings län"
+    },
+    {
+      "code": "0760",
+      "name": "Uppvidinge",
+      "group": "Kronobergs län"
+    },
+    {
+      "code": "0761",
+      "name": "Lessebo",
+      "group": "Kronobergs län"
+    },
+    {
+      "code": "0763",
+      "name": "Tingsryd",
+      "group": "Kronobergs län"
+    },
+    {
+      "code": "0764",
+      "name": "Alvesta",
+      "group": "Kronobergs län"
+    },
+    {
+      "code": "0765",
+      "name": "Älmhult",
+      "group": "Kronobergs län"
+    },
+    {
+      "code": "0767",
+      "name": "Markaryd",
+      "group": "Kronobergs län"
+    },
+    {
+      "code": "0780",
+      "name": "Växjö",
+      "group": "Kronobergs län"
+    },
+    {
+      "code": "0781",
+      "name": "Ljungby",
+      "group": "Kronobergs län"
+    },
+    {
+      "code": "0821",
+      "name": "Högsby",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0834",
+      "name": "Torsås",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0840",
+      "name": "Mörbylånga",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0860",
+      "name": "Hultsfred",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0861",
+      "name": "Mönsterås",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0862",
+      "name": "Emmaboda",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0880",
+      "name": "Kalmar",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0881",
+      "name": "Nybro",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0882",
+      "name": "Oskarshamn",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0883",
+      "name": "Västervik",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0884",
+      "name": "Vimmerby",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0885",
+      "name": "Borgholm",
+      "group": "Kalmar län"
+    },
+    {
+      "code": "0980",
+      "name": "Gotland",
+      "group": "Gotlands län"
+    },
+    {
+      "code": "1060",
+      "name": "Olofström",
+      "group": "Blekinge län"
+    },
+    {
+      "code": "1080",
+      "name": "Karlskrona",
+      "group": "Blekinge län"
+    },
+    {
+      "code": "1081",
+      "name": "Ronneby",
+      "group": "Blekinge län"
+    },
+    {
+      "code": "1082",
+      "name": "Karlshamn",
+      "group": "Blekinge län"
+    },
+    {
+      "code": "1083",
+      "name": "Sölvesborg",
+      "group": "Blekinge län"
+    },
+    {
+      "code": "1214",
+      "name": "Svalöv",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1230",
+      "name": "Staffanstorp",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1231",
+      "name": "Burlöv",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1233",
+      "name": "Vellinge",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1256",
+      "name": "Östra Göinge",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1257",
+      "name": "Örkelljunga",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1260",
+      "name": "Bjuv",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1261",
+      "name": "Kävlinge",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1262",
+      "name": "Lomma",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1263",
+      "name": "Svedala",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1264",
+      "name": "Skurup",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1265",
+      "name": "Sjöbo",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1266",
+      "name": "Hörby",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1267",
+      "name": "Höör",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1270",
+      "name": "Tomelilla",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1272",
+      "name": "Bromölla",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1273",
+      "name": "Osby",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1275",
+      "name": "Perstorp",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1276",
+      "name": "Klippan",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1277",
+      "name": "Åstorp",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1278",
+      "name": "Båstad",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1280",
+      "name": "Malmö",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1281",
+      "name": "Lund",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1282",
+      "name": "Landskrona",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1283",
+      "name": "Helsingborg",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1284",
+      "name": "Höganäs",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1285",
+      "name": "Eslöv",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1286",
+      "name": "Ystad",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1287",
+      "name": "Trelleborg",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1290",
+      "name": "Kristianstad",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1291",
+      "name": "Simrishamn",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1292",
+      "name": "Ängelholm",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1293",
+      "name": "Hässleholm",
+      "group": "Skåne län"
+    },
+    {
+      "code": "1315",
+      "name": "Hylte",
+      "group": "Hallands län"
+    },
+    {
+      "code": "1380",
+      "name": "Halmstad",
+      "group": "Hallands län"
+    },
+    {
+      "code": "1381",
+      "name": "Laholm",
+      "group": "Hallands län"
+    },
+    {
+      "code": "1382",
+      "name": "Falkenberg",
+      "group": "Hallands län"
+    },
+    {
+      "code": "1383",
+      "name": "Varberg",
+      "group": "Hallands län"
+    },
+    {
+      "code": "1384",
+      "name": "Kungsbacka",
+      "group": "Hallands län"
+    },
+    {
+      "code": "1401",
+      "name": "Härryda",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1402",
+      "name": "Partille",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1407",
+      "name": "Öckerö",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1415",
+      "name": "Stenungsund",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1419",
+      "name": "Tjörn",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1421",
+      "name": "Orust",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1427",
+      "name": "Sotenäs",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1430",
+      "name": "Munkedal",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1435",
+      "name": "Tanum",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1438",
+      "name": "Dals-Ed",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1439",
+      "name": "Färgelanda",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1440",
+      "name": "Ale",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1441",
+      "name": "Lerum",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1442",
+      "name": "Vårgårda",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1443",
+      "name": "Bollebygd",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1444",
+      "name": "Grästorp",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1445",
+      "name": "Essunga",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1446",
+      "name": "Karlsborg",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1447",
+      "name": "Gullspång",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1452",
+      "name": "Tranemo",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1460",
+      "name": "Bengtsfors",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1461",
+      "name": "Mellerud",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1462",
+      "name": "Lilla Edet",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1463",
+      "name": "Mark",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1465",
+      "name": "Svenljunga",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1466",
+      "name": "Herrljunga",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1470",
+      "name": "Vara",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1471",
+      "name": "Götene",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1472",
+      "name": "Tibro",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1473",
+      "name": "Töreboda",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1480",
+      "name": "Göteborg",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1481",
+      "name": "Mölndal",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1482",
+      "name": "Kungälv",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1484",
+      "name": "Lysekil",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1485",
+      "name": "Uddevalla",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1486",
+      "name": "Strömstad",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1487",
+      "name": "Vänersborg",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1488",
+      "name": "Trollhättan",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1489",
+      "name": "Alingsås",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1490",
+      "name": "Borås",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1491",
+      "name": "Ulricehamn",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1492",
+      "name": "Åmål",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1493",
+      "name": "Mariestad",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1494",
+      "name": "Lidköping",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1495",
+      "name": "Skara",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1496",
+      "name": "Skövde",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1497",
+      "name": "Hjo",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1498",
+      "name": "Tidaholm",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1499",
+      "name": "Falköping",
+      "group": "Västra Götalands län"
+    },
+    {
+      "code": "1715",
+      "name": "Kil",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1730",
+      "name": "Eda",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1737",
+      "name": "Torsby",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1760",
+      "name": "Storfors",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1761",
+      "name": "Hammarö",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1762",
+      "name": "Munkfors",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1763",
+      "name": "Forshaga",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1764",
+      "name": "Grums",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1765",
+      "name": "Årjäng",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1766",
+      "name": "Sunne",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1780",
+      "name": "Karlstad",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1781",
+      "name": "Kristinehamn",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1782",
+      "name": "Filipstad",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1783",
+      "name": "Hagfors",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1784",
+      "name": "Arvika",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1785",
+      "name": "Säffle",
+      "group": "Värmlands län"
+    },
+    {
+      "code": "1814",
+      "name": "Lekeberg",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1860",
+      "name": "Laxå",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1861",
+      "name": "Hallsberg",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1862",
+      "name": "Degerfors",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1863",
+      "name": "Hällefors",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1864",
+      "name": "Ljusnarsberg",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1880",
+      "name": "Örebro",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1881",
+      "name": "Kumla",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1882",
+      "name": "Askersund",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1883",
+      "name": "Karlskoga",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1884",
+      "name": "Nora",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1885",
+      "name": "Lindesberg",
+      "group": "Örebro län"
+    },
+    {
+      "code": "1904",
+      "name": "Skinnskatteberg",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1907",
+      "name": "Surahammar",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1960",
+      "name": "Kungsör",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1961",
+      "name": "Hallstahammar",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1962",
+      "name": "Norberg",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1980",
+      "name": "Västerås",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1981",
+      "name": "Sala",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1982",
+      "name": "Fagersta",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1983",
+      "name": "Köping",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "1984",
+      "name": "Arboga",
+      "group": "Västmanlands län"
+    },
+    {
+      "code": "2021",
+      "name": "Vansbro",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2023",
+      "name": "Malung-Sälen",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2026",
+      "name": "Gagnef",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2029",
+      "name": "Leksand",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2031",
+      "name": "Rättvik",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2034",
+      "name": "Orsa",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2039",
+      "name": "Älvdalen",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2061",
+      "name": "Smedjebacken",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2062",
+      "name": "Mora",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2080",
+      "name": "Falun",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2081",
+      "name": "Borlänge",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2082",
+      "name": "Säter",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2083",
+      "name": "Hedemora",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2084",
+      "name": "Avesta",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2085",
+      "name": "Ludvika",
+      "group": "Dalarnas län"
+    },
+    {
+      "code": "2101",
+      "name": "Ockelbo",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2104",
+      "name": "Hofors",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2121",
+      "name": "Ovanåker",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2132",
+      "name": "Nordanstig",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2161",
+      "name": "Ljusdal",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2180",
+      "name": "Gävle",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2181",
+      "name": "Sandviken",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2182",
+      "name": "Söderhamn",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2183",
+      "name": "Bollnäs",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2184",
+      "name": "Hudiksvall",
+      "group": "Gävleborgs län"
+    },
+    {
+      "code": "2260",
+      "name": "Ånge",
+      "group": "Västernorrlands län"
+    },
+    {
+      "code": "2262",
+      "name": "Timrå",
+      "group": "Västernorrlands län"
+    },
+    {
+      "code": "2280",
+      "name": "Härnösand",
+      "group": "Västernorrlands län"
+    },
+    {
+      "code": "2281",
+      "name": "Sundsvall",
+      "group": "Västernorrlands län"
+    },
+    {
+      "code": "2282",
+      "name": "Kramfors",
+      "group": "Västernorrlands län"
+    },
+    {
+      "code": "2283",
+      "name": "Sollefteå",
+      "group": "Västernorrlands län"
+    },
+    {
+      "code": "2284",
+      "name": "Örnsköldsvik",
+      "group": "Västernorrlands län"
+    },
+    {
+      "code": "2303",
+      "name": "Ragunda",
+      "group": "Jämtlands län"
+    },
+    {
+      "code": "2305",
+      "name": "Bräcke",
+      "group": "Jämtlands län"
+    },
+    {
+      "code": "2309",
+      "name": "Krokom",
+      "group": "Jämtlands län"
+    },
+    {
+      "code": "2313",
+      "name": "Strömsund",
+      "group": "Jämtlands län"
+    },
+    {
+      "code": "2321",
+      "name": "Åre",
+      "group": "Jämtlands län"
+    },
+    {
+      "code": "2326",
+      "name": "Berg",
+      "group": "Jämtlands län"
+    },
+    {
+      "code": "2361",
+      "name": "Härjedalen",
+      "group": "Jämtlands län"
+    },
+    {
+      "code": "2380",
+      "name": "Östersund",
+      "group": "Jämtlands län"
+    },
+    {
+      "code": "2401",
+      "name": "Nordmaling",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2403",
+      "name": "Bjurholm",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2404",
+      "name": "Vindeln",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2409",
+      "name": "Robertsfors",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2417",
+      "name": "Norsjö",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2418",
+      "name": "Malå",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2421",
+      "name": "Storuman",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2422",
+      "name": "Sorsele",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2425",
+      "name": "Dorotea",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2460",
+      "name": "Vännäs",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2462",
+      "name": "Vilhelmina",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2463",
+      "name": "Åsele",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2480",
+      "name": "Umeå",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2481",
+      "name": "Lycksele",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2482",
+      "name": "Skellefteå",
+      "group": "Västerbottens län"
+    },
+    {
+      "code": "2505",
+      "name": "Arvidsjaur",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2506",
+      "name": "Arjeplog",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2510",
+      "name": "Jokkmokk",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2513",
+      "name": "Överkalix",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2514",
+      "name": "Kalix",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2518",
+      "name": "Övertorneå",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2521",
+      "name": "Pajala",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2523",
+      "name": "Gällivare",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2560",
+      "name": "Älvsbyn",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2580",
+      "name": "Luleå",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2581",
+      "name": "Piteå",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2582",
+      "name": "Boden",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2583",
+      "name": "Haparanda",
+      "group": "Norrbottens län"
+    },
+    {
+      "code": "2584",
+      "name": "Kiruna",
+      "group": "Norrbottens län"
+    }
+  ],
+  "defaultEntity": "00",
+  "years": [
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+  ],
+  "nodes": [
+    {
+      "id": "skatt",
+      "label": "Skatteintäkter",
+      "side": "in",
+      "description": "Kommunal- eller regionalskatt från invånarna"
+    },
+    {
+      "id": "statsbidrag",
+      "label": "Statsbidrag och utjämning",
+      "side": "in",
+      "description": "Generella statsbidrag och netto från det kommunalekonomiska utjämningssystemet"
+    },
+    {
+      "id": "avgifter",
+      "label": "Taxor och avgifter",
+      "side": "in",
+      "description": "T.ex. barnomsorg, äldreomsorg, VA och avfall"
+    },
+    {
+      "id": "hyror",
+      "label": "Hyror och arrenden",
+      "side": "in",
+      "description": "Bostads- och lokalhyror, markarrenden"
+    },
+    {
+      "id": "bidrag",
+      "label": "Riktade bidrag",
+      "side": "in",
+      "description": "Riktade statsbidrag, ersättningar från Försäkringskassan, EU-bidrag m.m."
+    },
+    {
+      "id": "forsaljning",
+      "label": "Försäljning av verksamhet",
+      "side": "in",
+      "description": "Försäljning av tjänster till andra kommuner, regioner m.fl."
+    },
+    {
+      "id": "ovriga-intakter",
+      "label": "Övriga verksamhetsintäkter",
+      "side": "in",
+      "description": "Exploatering, försäljning av anläggningar m.m."
+    },
+    {
+      "id": "fin-in",
+      "label": "Finansiella intäkter",
+      "side": "in",
+      "description": "Räntor, utdelningar m.m."
+    },
+    {
+      "id": "extra-in",
+      "label": "Extraordinära intäkter",
+      "side": "in"
+    },
+    {
+      "id": "underskott",
+      "label": "Underskott",
+      "side": "in",
+      "role": "balance",
+      "description": "Årets negativa resultat"
+    },
+    {
+      "id": "k-pedagogisk",
+      "label": "Förskola, skola och utbildning",
+      "side": "out",
+      "description": "Förskola, grundskola, gymnasium, fritidshem, vuxenutbildning"
+    },
+    {
+      "id": "k-omsorg",
+      "label": "Vård och omsorg",
+      "side": "out",
+      "description": "Äldreomsorg, LSS, individ- och familjeomsorg, ekonomiskt bistånd"
+    },
+    {
+      "id": "k-infrastruktur",
+      "label": "Infrastruktur och skydd",
+      "side": "out",
+      "description": "Gator, parker, planering, räddningstjänst, miljö"
+    },
+    {
+      "id": "k-affar",
+      "label": "Affärsverksamhet",
+      "side": "out",
+      "description": "VA, avfall, energi, hamnar, kommersiell verksamhet"
+    },
+    {
+      "id": "k-kultur",
+      "label": "Kultur och fritid",
+      "side": "out",
+      "description": "Bibliotek, kulturskola, idrottsanläggningar, fritidsgårdar"
+    },
+    {
+      "id": "k-riktade",
+      "label": "Flyktingmottagande och arbetsmarknad",
+      "side": "out",
+      "description": "Särskilt riktade insatser"
+    },
+    {
+      "id": "k-politisk",
+      "label": "Politisk verksamhet",
+      "side": "out",
+      "description": "Nämnder, styrelser, revision, partistöd"
+    },
+    {
+      "id": "verksamhet",
+      "label": "Verksamhetens kostnader (ej fördelade)",
+      "side": "out",
+      "description": "Driftredovisning per verksamhetsområde saknas för detta år"
+    },
+    {
+      "id": "avskrivningar",
+      "label": "Avskrivningar",
+      "side": "out",
+      "description": "Värdeminskning av anläggningar och inventarier"
+    },
+    {
+      "id": "fin-ut",
+      "label": "Finansiella kostnader",
+      "side": "out",
+      "description": "Räntor m.m."
+    },
+    {
+      "id": "utjamningsavgift",
+      "label": "Avgift till utjämningssystemet",
+      "side": "out",
+      "description": "Netto inbetalt till det kommunalekonomiska utjämningssystemet"
+    },
+    {
+      "id": "extra-ut",
+      "label": "Extraordinära kostnader",
+      "side": "out"
+    },
+    {
+      "id": "overskott",
+      "label": "Överskott",
+      "side": "out",
+      "role": "balance",
+      "description": "Årets positiva resultat"
+    }
+  ],
+  "keyFigures": [
+    {
+      "key": "skattesats",
+      "label": "Skattesats, totalt",
+      "unit": "%",
+      "decimals": 2
+    },
+    {
+      "key": "skattesats-kommun",
+      "label": "Skattesats till kommunen",
+      "unit": "%",
+      "decimals": 2
+    },
+    {
+      "key": "skattesats-region",
+      "label": "Skattesats till regionen",
+      "unit": "%",
+      "decimals": 2
+    },
+    {
+      "key": "kostnader",
+      "label": "Totala kostnader",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "kostnad-per-inv",
+      "label": "Kostnader per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "skatteintakter",
+      "label": "Skatteintäkter",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "skatt-per-inv",
+      "label": "Skatteintäkter per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "statsbidrag",
+      "label": "Statsbidrag och utjämning (netto)",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "statsbidrag-per-inv",
+      "label": "Statsbidrag och utjämning per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "resultat",
+      "label": "Årets resultat",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "resultat-per-inv",
+      "label": "Årets resultat per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "folkmangd",
+      "label": "Folkmängd",
+      "unit": "inv.",
+      "decimals": 0
+    }
+  ],
+  "dataPath": "data/skatter-kommun-flode"
+}

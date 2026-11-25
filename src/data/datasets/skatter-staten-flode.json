@@ -1,0 +1,389 @@
+{
+  "id": "skatter-staten-flode",
+  "title": "Statens budget: var pengarna kommer ifrån och vart de går",
+  "description": "Alla skatter som staten tar in till vänster. Till höger i två steg: först skatterna som förs vidare och statsbudgetens utgifter, sedan vart pengarna tar vägen – kommuner, regioner, pensionssystemet och EU respektive statens utgiftsområden.",
+  "category": "skatter",
+  "source": {
+    "org": "Statskontoret",
+    "name": "Statsbudgetens utfall – årsutfall utgifter",
+    "url": "https://www.statskontoret.se/analys-och-statistik/oppna-data/arsutfall/",
+    "apiUrl": "https://www.statskontoret.se/OpenDataArsUtfallPage/GetFile?documentType=Utgift&fileType=Zip&fileName=%C3%85rsutfall%20utgifter%201997%20-%202025,%20definitivt.zip&Year=2025&month=0&status=Definitiv",
+    "license": "CC0 1.0 (Statskontorets öppna data)"
+  },
+  "extraSources": [
+    {
+      "org": "Statskontoret",
+      "name": "Statsbudgetens utfall – årsutfall inkomster",
+      "url": "https://www.statskontoret.se/analys-och-statistik/oppna-data/arsutfall/",
+      "apiUrl": "https://www.statskontoret.se/OpenDataArsUtfallPage/GetFile?documentType=Inkomst&fileType=Zip&fileName=%C3%85rsutfall%20inkomster%202006%20-%202025,%20%20andra%20prelimin%C3%A4ra.zip&Year=2025&month=0&status=Prelimin%C3%A4r%202",
+      "license": "CC0 1.0 (Statskontorets öppna data)"
+    },
+    {
+      "org": "SCB",
+      "name": "Kommunalskatteuppgifter, riket",
+      "url": "https://www.scb.se/OE0101/",
+      "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB2015/data?lang=sv&outputFormat=json-stat2&valueCodes[ContentsCode]=OE0101F2,OE0101F3&valueCodes[Tid]=*",
+      "tableId": "TAB2015",
+      "license": "CC0 1.0 (SCB öppna data)",
+      "updated": "2025-12-15T07:00:00Z"
+    },
+    {
+      "org": "SCB",
+      "name": "Befolkningsutveckling i riket",
+      "url": "https://www.scb.se/BE0101/",
+      "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4365/data?lang=sv&outputFormat=json-stat2&valueCodes[Kon]=1%2B2&valueCodes[ContentsCode]=000000LV&valueCodes[Tid]=*",
+      "tableId": "TAB4365",
+      "license": "CC0 1.0 (SCB öppna data)",
+      "updated": "2026-02-24T07:00:00Z"
+    },
+    {
+      "org": "SCB",
+      "producer": "Riksgälden",
+      "name": "Statsskulden fördelad på marknader",
+      "url": "https://www.scb.se/OE0202/",
+      "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6378/data?lang=sv&outputFormat=json-stat2&valueCodes[Marknad]=SSTot&valueCodes[ContentsCode]=000007J7&valueCodes[Tid]=*",
+      "tableId": "TAB6378",
+      "license": "CC0 1.0 (SCB öppna data)",
+      "updated": "2026-11-09T07:00:00Z"
+    },
+    {
+      "org": "SCB",
+      "name": "BNP till marknadspris (skattekvot och BNP)",
+      "url": "https://www.scb.se/NR0103/",
+      "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB121/data?lang=sv&outputFormat=json-stat2&valueCodes[Skattetyp]=101&valueCodes[ContentsCode]=000000T8&valueCodes[Tid]=*",
+      "tableId": "TAB121",
+      "license": "CC0 1.0 (SCB öppna data)",
+      "updated": "2026-08-28T06:00:00Z"
+    }
+  ],
+  "fetchedAt": "2026-11-25T07:02:59.221Z",
+  "notes": [
+    "Bruttoperspektiv: skatterna visas som staten tar in dem. En stor del – den kommunala inkomstskatten till kommuner och regioner, avgifterna till pensionssystemet och tullar till EU – förs direkt vidare och visas som \"Skatter som förs vidare\". Statsbudgetens egna inkomster är summan efter den posten.",
+    "Den kommunala inkomstskatten redovisas som en post (inkomsttitel 1811). Uppdelningen på kommuner och regioner följer riksgenomsnittets skattesatser samma år (SCB TAB2015) och är därför en uppskattning.",
+    "\"Statsbudgetens utgifter\" omfattar utgiftsområdena, Riksgäldens nettoutlåning och kassamässig korrigering när de är positiva. Avräkningar och stöd via skattekontot hör till inkomstsidan och visas för sig.",
+    "Belopp per invånare beräknas med folkmängden i riket den 31 december (SCB TAB4365). Statsskulden avser december respektive år (Riksgälden via SCB TAB6378) och BNP löpande priser (SCB TAB121).",
+    "Budgetsaldot = statsbudgetens inkomster minus utgifter (utgiftsområden, Riksgäldens nettoutlåning och kassamässig korrigering). Ålderspensionssystemet ligger vid sidan av statens budget och ingår inte.",
+    "De 12 största utgiftsområdena 2025 visas var för sig; övriga är sammanslagna. Statskontorets fil använder dagens indelning av utgiftsområden även för tidigare år.",
+    "Senaste årets inkomster kan vara preliminära och revideras när Statskontoret publicerar definitivt utfall.",
+    "Avräkningar i skattesystemet är ett netto av periodiseringar, avräkningar mot kommunsektorn och tillkommande skatter."
+  ],
+  "kind": "flow",
+  "unit": "mnkr",
+  "entityLabel": "Enhet",
+  "entityParam": "staten",
+  "entities": [
+    {
+      "code": "SE",
+      "name": "Staten"
+    }
+  ],
+  "defaultEntity": "SE",
+  "years": [
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+  ],
+  "nodes": [
+    {
+      "id": "skatt-arbete-direkt",
+      "label": "Inkomstskatter m.m.",
+      "side": "in",
+      "description": "Direkta skatter på arbete: statlig och kommunal inkomstskatt, allmän pensionsavgift, netto efter skattereduktioner"
+    },
+    {
+      "id": "skatt-arbete-indirekt",
+      "label": "Arbetsgivaravgifter m.m.",
+      "side": "in",
+      "description": "Indirekta skatter på arbete: arbetsgivaravgifter, egenavgifter, särskild löneskatt"
+    },
+    {
+      "id": "skatt-konsumtion",
+      "label": "Moms och punktskatter",
+      "side": "in",
+      "description": "Skatt på konsumtion och insatsvaror: mervärdesskatt, energi- och koldioxidskatt, alkohol, tobak m.m."
+    },
+    {
+      "id": "skatt-kapital",
+      "label": "Skatt på kapital",
+      "side": "in",
+      "description": "Bolagsskatt, kapitalinkomstskatt, fastighetsavgift, avkastningsskatt m.m."
+    },
+    {
+      "id": "skatt-ovriga",
+      "label": "Övriga skatter",
+      "side": "in",
+      "description": "Skatt på import (tullar) samt restförda och övriga skatter"
+    },
+    {
+      "id": "statens-verksamhet",
+      "label": "Inkomster av statens verksamhet",
+      "side": "in",
+      "description": "Aktieutdelningar från statliga bolag, offentligrättsliga avgifter, räntor, böter m.m."
+    },
+    {
+      "id": "eu-bidrag",
+      "label": "Bidrag från EU",
+      "side": "in",
+      "description": "Jordbruksfonder, regional- och socialfonder, återhämtningsfaciliteten m.m."
+    },
+    {
+      "id": "ovriga-inkomster",
+      "label": "Övriga inkomster",
+      "side": "in",
+      "description": "Försåld egendom, återbetalda lån, statliga pensionsavgifter (kalkylmässiga inkomster)"
+    },
+    {
+      "id": "krediteringar-motsatt",
+      "label": "Stöd via skattekontot (netto in)",
+      "side": "in",
+      "description": "Utgifter som redovisas som krediteringar på skattekontot, t.ex. anställningsstöd (inkomsttyp 8000)"
+    },
+    {
+      "id": "rgk-nettoutlaning-motsatt",
+      "label": "Riksgäldens nettoutlåning (återbetalt netto)",
+      "side": "in",
+      "description": "Riksgäldskontorets utlåning till myndigheter och statliga bolag, netto"
+    },
+    {
+      "id": "kassamassig-motsatt",
+      "label": "Kassamässig korrigering (netto in)",
+      "side": "in",
+      "description": "Skillnad mellan anslagsavräknade och kassamässiga utgifter"
+    },
+    {
+      "id": "budgetunderskott",
+      "label": "Budgetunderskott (lånat)",
+      "side": "in",
+      "role": "balance",
+      "description": "Statsbudgetens underskott – finansieras med upplåning via Riksgälden"
+    },
+    {
+      "id": "g-vidareforing",
+      "label": "Skatter som förs vidare",
+      "side": "out",
+      "role": "group",
+      "description": "Skatter som staten tar in men för vidare till kommuner, regioner, pensionssystemet och EU (avgående poster 1700/1800)"
+    },
+    {
+      "id": "g-statsbudget",
+      "label": "Statsbudgetens utgifter",
+      "side": "out",
+      "role": "group",
+      "description": "Utgiftsområden, Riksgäldens nettoutlåning och kassamässig korrigering – det som i vardagligt tal kallas statsbudgeten"
+    },
+    {
+      "id": "vf-kommuner",
+      "label": "Kommunalskatt till kommunerna",
+      "side": "out",
+      "parent": "g-vidareforing",
+      "description": "Den kommunala inkomstskattens kommundel (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)"
+    },
+    {
+      "id": "vf-regioner",
+      "label": "Kommunalskatt till regionerna",
+      "side": "out",
+      "parent": "g-vidareforing",
+      "description": "Den kommunala inkomstskattens regiondel (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)"
+    },
+    {
+      "id": "vf-pension",
+      "label": "Avgifter till pensionssystemet",
+      "side": "out",
+      "parent": "g-vidareforing",
+      "description": "Ålderspensionsavgifter och allmän pensionsavgift till AP-fonderna och premiepensionen (inkomsttitel 1812/1813)"
+    },
+    {
+      "id": "vf-eu",
+      "label": "Tullar och avgifter till EU",
+      "side": "out",
+      "parent": "g-vidareforing",
+      "description": "Tullar och andra skatter som tillfaller EU (inkomsttitel 1711)"
+    },
+    {
+      "id": "avrakningar",
+      "label": "Avräkningar i skattesystemet",
+      "side": "out",
+      "description": "Periodiseringar, avräkningar och tillkommande skatter i anslutning till skattesystemet (netto)"
+    },
+    {
+      "id": "krediteringar",
+      "label": "Stöd som betalas via skattekontot",
+      "side": "out",
+      "description": "Utgifter som redovisas som krediteringar på skattekontot, t.ex. anställningsstöd (inkomsttyp 8000)"
+    },
+    {
+      "id": "uo-25",
+      "label": "Allmänna bidrag till kommuner",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 25"
+    },
+    {
+      "id": "uo-06",
+      "label": "Försvar och samhällets krisberedskap",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 6"
+    },
+    {
+      "id": "uo-10",
+      "label": "Ekonomisk trygghet vid sjukdom och funktionsnedsättning",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 10"
+    },
+    {
+      "id": "uo-09",
+      "label": "Hälsovård, sjukvård och social omsorg",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 9"
+    },
+    {
+      "id": "uo-16",
+      "label": "Utbildning och universitetsforskning",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 16"
+    },
+    {
+      "id": "uo-12",
+      "label": "Ekonomisk trygghet för familjer och barn",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 12"
+    },
+    {
+      "id": "uo-14",
+      "label": "Arbetsmarknad och arbetsliv",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 14"
+    },
+    {
+      "id": "uo-22",
+      "label": "Kommunikationer",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 22"
+    },
+    {
+      "id": "uo-04",
+      "label": "Rättsväsendet",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 4"
+    },
+    {
+      "id": "uo-11",
+      "label": "Ekonomisk trygghet vid ålderdom",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 11"
+    },
+    {
+      "id": "uo-27",
+      "label": "Avgiften till Europeiska unionen",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 27"
+    },
+    {
+      "id": "uo-07",
+      "label": "Internationellt bistånd",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Utgiftsområde 7"
+    },
+    {
+      "id": "uo-ovriga",
+      "label": "Övriga utgiftsområden",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "15 Studiestöd, 26 Statsskuldsräntor m.m., 2 Samhällsekonomi och finansförvaltning, 23 Areella näringar, landsbygd och livsmedel, 1 Rikets styrelse, 17 Kultur, medier, trossamfund och fritid, 3 Skatt, tull och exekution, 20 Klimat, miljö och natur, 8 Migration, 24 Näringsliv, 13 Integration och jämställdhet, 21 Energi, 19 Regional utveckling, 18 Samhällsplanering, bostadsförsörjning och byggande samt konsumentpolitik, 5 Internationell samverkan"
+    },
+    {
+      "id": "rgk-nettoutlaning",
+      "label": "Riksgäldens nettoutlåning",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Riksgäldskontorets utlåning till myndigheter och statliga bolag, netto"
+    },
+    {
+      "id": "kassamassig",
+      "label": "Kassamässig korrigering",
+      "side": "out",
+      "parent": "g-statsbudget",
+      "description": "Skillnad mellan anslagsavräknade och kassamässiga utgifter"
+    },
+    {
+      "id": "budgetoverskott",
+      "label": "Budgetöverskott",
+      "side": "out",
+      "role": "balance",
+      "description": "Statsbudgetens överskott – används för att amortera statsskulden"
+    }
+  ],
+  "keyFigures": [
+    {
+      "key": "skatter-brutto",
+      "label": "Skatteintäkter (brutto)",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "inkomster",
+      "label": "Statsbudgetens inkomster",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "utgifter",
+      "label": "Statsbudgetens utgifter",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "saldo",
+      "label": "Budgetsaldo",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "utgifter-per-inv",
+      "label": "Statsbudgetens utgifter per invånare",
+      "unit": "kr",
+      "decimals": 0
+    },
+    {
+      "key": "statsskuld",
+      "label": "Statsskuld vid årets slut",
+      "unit": "mnkr",
+      "decimals": 0
+    },
+    {
+      "key": "statsskuld-bnp",
+      "label": "Statsskuld i % av BNP",
+      "unit": "%",
+      "decimals": 1
+    }
+  ],
+  "dataPath": "data/skatter-staten-flode"
+}

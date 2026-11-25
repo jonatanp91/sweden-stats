@@ -1,0 +1,146 @@
+---
+/** Genererar en sida per kategori i src/data/categories.ts. */
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import DatasetCard from '../../components/DatasetCard.astro';
+import { categories, type Category } from '../../data/categories';
+import { sourceById } from '../../data/sources';
+import { requireDataset } from '../../lib/datasets';
+
+export const getStaticPaths = (() => {
+  const reserved = new Set(['om', '404']);
+  return categories.map((category) => {
+    if (reserved.has(category.slug)) throw new Error(`Kategorislug "${category.slug}" krockar med en befintlig sida`);
+    return { params: { kategori: category.slug }, props: { category } };
+  });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  category: Category;
+}
+const { category } = Astro.props;
+const datasets = category.datasets.map(requireDataset);
+const srcs = category.sources.map((id) => sourceById[id]).filter((s) => s !== undefined);
+---
+
+<Base title={category.name} description={category.description} activeCategory={category.slug}>
+  <div class="container">
+    <header class="page-head">
+      <h1>{category.name}</h1>
+      <p class="lead">{category.description}</p>
+    </header>
+
+    {
+      datasets.length > 0 && datasets.length > 1 && (
+        <nav class="toc" aria-label="Diagram på sidan">
+          {datasets.map((d) => (
+            <a href={`#${d.id}`}>{d.title}</a>
+          ))}
+        </nav>
+      )
+    }
+
+    {datasets.map((d) => <DatasetCard dataset={d} />)}
+
+    {
+      datasets.length === 0 && (
+        <div class="coming card">
+          <h2>Kommer snart</h2>
+          <p class="muted">
+            Den här kategorin är planerad men har ännu inga diagram. Nedan finns de källor och idéer som är tänkta.
+          </p>
+        </div>
+      )
+    }
+
+    <div class="meta-grid">
+      {
+        category.ideas.length > 0 && (
+          <section class="card meta">
+            <h2>{datasets.length ? 'Idéer framåt' : 'Planerade visualiseringar'}</h2>
+            <ul>
+              {category.ideas.map((i) => (
+                <li>{i}</li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+      <section class="card meta">
+        <h2>Källor</h2>
+        <ul class="sources">
+          {
+            srcs.map((s) => (
+              <li>
+                <a href={s.url} target="_blank" rel="noopener">
+                  {s.name}
+                </a>
+                <span class="muted">{s.description}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page-head {
+    margin-bottom: 24px;
+  }
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .toc a {
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    background: var(--surface);
+  }
+  .toc a:hover {
+    border-color: var(--accent);
+    color: var(--text-primary);
+  }
+  .coming {
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .meta {
+    padding: 20px;
+  }
+  .meta h2 {
+    font-size: 1.05rem;
+  }
+  .meta ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .meta li {
+    margin-bottom: 6px;
+  }
+  .sources {
+    list-style: none;
+    padding-left: 0 !important;
+  }
+  .sources li {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+  :global(.dataset) {
+    scroll-margin-top: 110px;
+  }
+</style>
