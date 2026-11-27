@@ -38,6 +38,7 @@ npm test               # enhetstester (vitest) för parsning/transformering
 npm run check          # typkontroll (astro check)
 npm run build          # statisk build → dist/
 npm run preview        # förhandsgranska dist/
+npm run dev -- --host  # nå utvecklingsservern från telefonen (samma wifi, "Network"-adressen)
 ```
 
 **Windows-fallgrop:** kör alltid via `npm run …` (inte `npx astro …`/`npx vitest …`). Skripten går via
@@ -169,4 +170,7 @@ jobbskatteavdragets parametrar) står i skriptet per inkomstår med källa. **Ny
 `npm run fetch -- skattekalkyl` – hämtaren stoppar om beräkningen avviker mer än 2 kr/mån från Skatteverkets
 skattetabeller. Hämtaren läser flödesdataseten, så `skatter` och `staten` måste ha körts först.
 
-**Nästa steg (förslag):** publicering (GitHub Pages via Actions + schemalagd datauppdatering), Svenska kraftnät-data (timvis el per elområde), valresultat, BNP/inflation (SCB/Riksbanken), kommunernas skulder och investeringar per invånare, kalkylatorn för fler inkomstår och för pensionärer (66+).
+**Publicering:** GitHub Pages via `.github/workflows/deploy.yml` vid push till `main` → `https://jonatanp91.github.io/sweden-stats/`
+(`base` sätts av arbetsflödet; se `docs/beslut.md` B-018). All intern länkning och datahämtning måste gå via `url()`.
+
+**Nästa steg (förslag):** schemalagd datauppdatering (Actions), Svenska kraftnät-data (timvis el per elområde), valresultat, BNP/inflation (SCB/Riksbanken), kommunernas skulder och investeringar per invånare, kalkylatorn för fler inkomstår och för pensionärer (66+).

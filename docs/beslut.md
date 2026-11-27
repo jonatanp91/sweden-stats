@@ -142,3 +142,14 @@ slutavräkningen – nära titel 1115 (skatten på årets inkomster, 959 mdkr).
 **Beslut (ägarens val):** behåll utbetalningen (1811) i statens diagram – det är vad statsbudgeten redovisar – och
 förklara skillnaden i noter (staten: med årets belopp för 1811 och 1115; kommun/region: allmän notering) och i
 nodernas tooltip.
+
+## B-018 Publicering på GitHub Pages (2026-11-25)
+
+Ägaren vill kunna se sajten från telefonen och varifrån som helst, och accepterar att den blir publik.
+**Beslut:** GitHub Pages via Actions (`.github/workflows/deploy.yml`): vid push till `main` körs tester,
+typkontroll och build, och `dist/` publiceras. `site` och `base` i `astro.config.mjs` sätts från miljövariablerna
+`SITE_URL`/`BASE_PATH` (som arbetsflödet tar från `actions/configure-pages`), så lokalt ligger sajten kvar i roten.
+Datan hämtas inte i arbetsflödet – den incheckade datan publiceras som den är.
+**Konsekvens:** Adressen blir `https://jonatanp91.github.io/sweden-stats/`. Från ett privat repo kräver Pages en
+betald GitHub-plan (annars måste repot göras publikt); sajten är publik oavsett repots synlighet (utom på Enterprise).
+Schemalagd datauppdatering är ett senare steg.

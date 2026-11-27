@@ -7,10 +7,13 @@ import { fileURLToPath } from 'node:url';
 // tappar Astro/Vite annars kopplingen mellan sidor och CSS, och bygget saknar stilmallar. Se docs/beslut.md.
 const root = fileURLToPath(new URL('.', import.meta.url)).replace(/^[a-z]:/, (d) => d.toUpperCase());
 
-// När sajten publiceras (t.ex. GitHub Pages) sätts `site` och ev. `base` här.
-// All intern länkning går via `url()` i src/lib/url.ts så att `base` fungerar.
+// Publicering (GitHub Pages, .github/workflows/deploy.yml): arbetsflödet sätter SITE_URL och BASE_PATH,
+// t.ex. https://<användare>.github.io och /sweden-stats. Lokalt är de tomma → sajten ligger i roten.
+// All intern länkning går via `url()` i src/lib/url.ts så att `base` fungerar. Se docs/beslut.md B-014.
 export default defineConfig({
   root,
+  site: process.env.SITE_URL || undefined,
+  base: process.env.BASE_PATH || '/',
   integrations: [react()],
   trailingSlash: 'always',
 });
