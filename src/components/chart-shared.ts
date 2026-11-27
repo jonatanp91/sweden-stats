@@ -147,3 +147,21 @@ export function writeParams(params: Record<string, string>) {
     /* ignorera */
   }
 }
+
+/** Sant på pekskärmar utan hovring (telefoner/surfplattor) – där görs diagram statiska så att sidan går att scrolla. */
+export function useCoarsePointer(): boolean {
+  const [coarse, setCoarse] = useState(false);
+  useEffect(() => {
+    let mq: MediaQueryList;
+    try {
+      mq = window.matchMedia('(hover: none) and (pointer: coarse)');
+    } catch {
+      return;
+    }
+    const update = () => setCoarse(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return coarse;
+}

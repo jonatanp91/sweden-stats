@@ -148,14 +148,14 @@ export const INCOME_ITEMS: StateItem[] = [
     label: 'Kommunalskatt till kommunerna',
     side: 'out',
     parent: GROUP_VIDAREFORING,
-    description: 'Den kommunala inkomstskattens kommundel (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)',
+    description: 'Den kommunala inkomstskattens kommundel som staten betalat ut under året – preliminärt belopp efter prognos plus avräkning för tidigare år (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)',
   },
   {
     id: 'vf-regioner',
     label: 'Kommunalskatt till regionerna',
     side: 'out',
     parent: GROUP_VIDAREFORING,
-    description: 'Den kommunala inkomstskattens regiondel (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)',
+    description: 'Den kommunala inkomstskattens regiondel som staten betalat ut under året – preliminärt belopp efter prognos plus avräkning för tidigare år (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)',
   },
   {
     id: 'vf-pension',

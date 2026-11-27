@@ -36,7 +36,8 @@ källa eller upptäcker en egenhet.
 | TAB6574 | Folkmängd per region 2010– | `Region` kommunkod, `Alder=totalt`, `Kon=1+2` | skatter-kommuner (per invånare) |
 | TAB6378 | Statsskulden per månad 1970– (Riksgälden) | `Marknad=SSTot`, `ContentsCode=000007J7`; enhet mkr. December = årets slut | skatter-statsskuld, skatter-skuld-bnp, skatter-staten-flode (nyckeltal) |
 | TAB5050 | Maastrichtskuld, år 1996– | `Sektor=S13` (offentlig förvaltning), `Kontopost=FL01N`, `ContentsCode=000002KK`; mnkr | skatter-skuld-bnp |
-| TAB121 | Skattekvot och BNP, år 1950– | `Skattetyp=101` BNP till marknadspris, `ContentsCode=000000T8` (mnkr; `000000SP` = andel av BNP). Har senaste året, till skillnad från TAB5621 (som används som kontroll) | skatter-skuld-bnp, skatter-staten-flode |
+| TAB121 | Skattekvot och BNP, år 1950– | `Skattetyp=101` BNP till marknadspris, `ContentsCode=000000T8` (mnkr; `000000SP` = andel av BNP). Har senaste året, till skillnad från TAB5621 (som används som kontroll) | skatter-skuld-bnp, skatter-staten-flode, skatter-staten-utgifter |
+| TAB121 | Skatter per skattetyp, år 1950– | `Skattetyp`: 102 totala skatter, 201+202 D.2 produktion och import (Sverige + EU), 203 D.5 inkomst- och förmögenhetsskatter, 204 D.61C obligatoriska sociala avgifter, 205 D.91 kapitalskatter. `000000SP` (procent av BNP) finns **bara för totalen** – per typ räknas mnkr / BNP; hämtaren kontrollerar mot SCB:s skattekvot (±0,1 pe) | skatter-skattekvot |
 | TAB4365 | (se ovan) folkmängd i riket 31 dec | används även för kr/invånare i statens flöde | skatter-staten-flode |
 
 **Resultaträkningens identiteter** (verifierade): 030 = 010 + 022 + avskrivningar; 035 = 030 + 040 + statsbidrag/utjämning;
@@ -96,10 +97,16 @@ Andra långa serier: 98210 Stockholm-Observatoriekullen (1756–2024, fortsätte
 - **Utgifter** (1997–): `Utgiftsområde` 01–27 per anslag. Rader utan utgiftsområde: Riksgäldskontorets nettoutlåning
   och Kassamässig korrigering **ingår** i budgetsaldot; Utgiftstak, Marginal till utgiftstaket, Ålderspensionssystemet
   vid sidan av statens budget och Förändring av anslagsbehållningar ingår **inte**.
+- `skatter-staten-utgifter`: bara rader med utgiftsområde (2006–), de 7 största senaste året + övriga, delat med BNP
+  (TAB121). Filen använder dagens UO-indelning även bakåt, så serierna är jämförbara.
 - Budgetsaldo (kontrollerat): 2020 −221 mdkr, 2022 +164 mdkr, 2025 −102 mdkr.
 - **Vidareföring (inkomsttitlar):** 1711 EU-skatter, 1811 Kommunala skatter (kommuner + regioner i en post – delas
   i flödet efter riksgenomsnittets skattesatser, SCB TAB2015 F2/F3), 1812 Avgifter till AP-fonder, 1813 Avgifter
   till premiepensionssystemet (bara 2006–2007). Okända titlar under 1800 stoppar hämtningen.
+- **1811 ≠ kommunernas skatteintäkter:** 1811 är det staten *betalat ut* under året (preliminärt efter prognos för
+  skatteunderlaget + slutavräkning för år t−2), medan titel 1115 Kommunal inkomstskatt är skatten på årets inkomster
+  (periodiserad). Kommunernas/regionernas bokförda skatteintäkter (SCB:s räkenskapssammandrag) ligger nära 1115.
+  2025: 1811 = 984 mdkr, 1115 = 959 mdkr, kommuner + regioner = 963 mdkr. Förklaras i datasetens noter (B-017).
 - ESV (esv.se) svarade 404 på alla anrop i november 2026; Statskontoret publicerar samma data i samma format.
 
 ## Skatteverket – öppna data (CC0) och regler

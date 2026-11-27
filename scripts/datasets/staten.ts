@@ -1,6 +1,7 @@
 /**
  * Staten – statsbudgetens utfall från Statskontoret (öppna data, CC0).
  * Producerar: skatter-staten-flode (Sankey: skatter och andra inkomster → staten → vidareföring, utgiftsområden, saldo)
+ *            skatter-staten-utgifter (tidsserie: utgifter per utgiftsområde i procent av BNP)
  *
  * Bruttoperspektiv (ägarens val): skatterna visas brutto till vänster; det som staten för vidare till kommuner,
  * regioner, pensionssystemet och EU visas som en egen utgiftspost. Budgetsaldot balanserar flödet.
@@ -25,15 +26,16 @@ import {
   toExpenseRows,
   toIncomeRows,
   uoNodeId,
+  type ExpenseRow,
 } from '../lib/statskontoret.ts';
-import { fetchDebtDecember, fetchGdp, fetchMunicipalTaxShare, fetchPopulationRiket } from '../lib/scb-series.ts';
+import { fetchDebtDecember, fetchGdp, fetchMunicipalTaxShare, fetchPopulationRiket, type YearSeries } from '../lib/scb-series.ts';
 
 const TOP_AREAS = 12;
 const FIRST_YEAR = 2006;
 
 export const staten: Fetcher = {
   name: 'staten',
-  produces: ['skatter-staten-flode'],
+  produces: ['skatter-staten-flode', 'skatter-staten-utgifter'],
   async run() {
     const links = await findArsutfallLinks();
     const income = toIncomeRows(await fetchZipCsv(links.inkomster));
@@ -84,6 +86,12 @@ export const staten: Fetcher = {
     const sides = new Map<string, 'in' | 'out'>(items.map((i) => [i.id, i.side]));
 
     const round = (v: number, d = 0) => Math.round(v * 10 ** d) / 10 ** d;
+    // Kommunalskatt: utbetalt under året (1811, avgående post) jämfört med skatten på årets inkomster (1115)
+    const titleSum = (titel: string) => income.filter((r) => r.year === latest && r.titel === titel).reduce((a, r) => a + r.utfall, 0);
+    const paidOut = -titleSum('1811');
+    const accrued = titleSum('1115');
+    if (!(paidOut > 0 && accrued > 0)) throw new Error(`Inkomsttitel 1811/1115 saknas för ${latest}`);
+    const mdkr = (v: number) => `${Math.round(v / 1000).toLocaleString('sv-SE')} mdkr`;
     const yearData = years.map((y) => {
       const municipalShare = share.values.get(y);
       if (municipalShare === undefined) throw new Error(`Kommunal skattesats saknas i TAB2015 för ${y}`);
@@ -152,6 +160,7 @@ export const staten: Fetcher = {
           notes: [
             'Bruttoperspektiv: skatterna visas som staten tar in dem. En stor del – den kommunala inkomstskatten till kommuner och regioner, avgifterna till pensionssystemet och tullar till EU – förs direkt vidare och visas som "Skatter som förs vidare". Statsbudgetens egna inkomster är summan efter den posten.',
             'Den kommunala inkomstskatten redovisas som en post (inkomsttitel 1811). Uppdelningen på kommuner och regioner följer riksgenomsnittets skattesatser samma år (SCB TAB2015) och är därför en uppskattning.',
+            `Kommunalskatten till kommuner och regioner är det staten betalade ut under året (${latest}: ${mdkr(paidOut)}). Den kommunala inkomstskatten på årets inkomster var ${mdkr(accrued)} (inkomsttitel 1115). Skillnaden beror på att utbetalningarna är preliminära – de bygger på en prognos för skatteunderlaget – och att avräkningen mot den slutliga skatten görs två år senare. Kommunernas och regionernas egna bokslut (deras budgetdiagram) ligger nära den faktiska skatten.`,
             '"Statsbudgetens utgifter" omfattar utgiftsområdena, Riksgäldens nettoutlåning och kassamässig korrigering när de är positiva. Avräkningar och stöd via skattekontot hör till inkomstsidan och visas för sig.',
             'Belopp per invånare beräknas med folkmängden i riket den 31 december (SCB TAB4365). Statsskulden avser december respektive år (Riksgälden via SCB TAB6378) och BNP löpande priser (SCB TAB121).',
             'Budgetsaldot = statsbudgetens inkomster minus utgifter (utgiftsområden, Riksgäldens nettoutlåning och kassamässig korrigering). Ålderspensionssystemet ligger vid sidan av statens budget och ingår inte.',
@@ -179,6 +188,78 @@ export const staten: Fetcher = {
         },
         years: yearData,
       },
+      expenseByArea(expense, years, ranked, gdp, links.utgifter, fetchedAt),
     ];
   },
 };
+
+const SERIES_AREAS = 7;
+
+/**
+ * Statens utgifter per utgiftsområde över tid i procent av BNP: de största områdena senaste året var för sig,
+ * resten som "Övriga utgiftsområden" (max 8 serier). Bara utgiftsområden – inte Riksgäldens nettoutlåning eller
+ * kassamässig korrigering.
+ */
+function expenseByArea(
+  expense: ExpenseRow[],
+  years: string[],
+  ranked: [string, { name: string; total: number }][],
+  gdp: YearSeries,
+  apiUrl: string,
+  fetchedAt: string,
+) {
+  const top = ranked.slice(0, SERIES_AREAS);
+  const topSet = new Set(top.map(([uo]) => uo));
+  const OTHER = 'ovriga';
+  // år → serie → mnkr
+  const sums = new Map<string, Map<string, number>>();
+  const totals = new Map<string, number>();
+  for (const r of expense) {
+    if (!r.uo || !years.includes(r.year)) continue;
+    const key = topSet.has(r.uo) ? r.uo : OTHER;
+    const m = sums.get(r.year) ?? new Map<string, number>();
+    m.set(key, (m.get(key) ?? 0) + r.utfall);
+    sums.set(r.year, m);
+    totals.set(r.year, (totals.get(r.year) ?? 0) + r.utfall);
+  }
+  const usable = years.filter((y) => gdp.values.has(y) && sums.has(y));
+  // Summakontroll: serierna ska summera till utgiftsområdenas totala utgifter
+  for (const y of usable) {
+    const s = [...sums.get(y)!.values()].reduce((a, v) => a + v, 0);
+    if (Math.abs(s - totals.get(y)!) > 1) throw new Error(`Utgiftsområden ${y}: ${s} ≠ ${totals.get(y)}`);
+  }
+  const last = usable[usable.length - 1]!;
+  const pctOf = (key: string) =>
+    usable.map((t) => ({ t, v: Math.round(((sums.get(t)!.get(key) ?? 0) / gdp.values.get(t)!) * 10000) / 100 }));
+  const mdkr = (v: number) => `${Math.round(v / 1000).toLocaleString('sv-SE')} mdkr`;
+  const lastPct = (totals.get(last)! / gdp.values.get(last)!) * 100;
+
+  return {
+    id: 'skatter-staten-utgifter',
+    title: 'Statens utgifter per utgiftsområde över tid',
+    description: `Statsbudgetens utgifter per utgiftsområde i procent av BNP sedan ${usable[0]}. De ${SERIES_AREAS} största områdena ${last} visas var för sig.`,
+    category: 'skatter',
+    unit: '% av BNP',
+    frequency: 'year' as const,
+    source: {
+      org: 'Statskontoret',
+      name: 'Statsbudgetens utfall – årsutfall utgifter',
+      url: ARSUTFALL_PAGE,
+      apiUrl,
+      license: STATSKONTORET_LICENSE,
+    },
+    extraSources: [gdp.source],
+    fetchedAt,
+    chart: { type: 'stacked-area' as const, yFromZero: true, decimals: 2 },
+    notes: [
+      `Utgiftsområdenas utgifter ${last}: ${mdkr(totals.get(last)!)} i löpande priser, ${lastPct.toLocaleString('sv-SE', { maximumFractionDigits: 1 })} % av BNP. Procent av BNP gör åren jämförbara trots inflation och ekonomisk tillväxt.`,
+      'Bara statsbudgetens utgiftsområden. Riksgäldens nettoutlåning och kassamässig korrigering ingår inte, och inte heller skatter som förs vidare till kommuner, regioner och pensionssystemet (se statens budgetdiagram). Generella statsbidrag till kommuner och regioner ingår (utgiftsområde 25).',
+      'Statskontorets fil använder dagens indelning av utgiftsområden även för tidigare år, så serierna är jämförbara över tid.',
+      'BNP till marknadspris i löpande priser (SCB TAB121). Senaste årets BNP och utfall kan vara preliminära.',
+    ],
+    series: [
+      ...top.map(([uo, a]) => ({ key: `uo-${uo}`, label: a.name, points: pctOf(uo) })),
+      { key: OTHER, label: 'Övriga utgiftsområden', points: pctOf(OTHER) },
+    ],
+  };
+}

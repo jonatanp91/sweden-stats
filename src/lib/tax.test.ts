@@ -54,28 +54,58 @@ describe('kalkylatorns flöde', () => {
   const noFlows = { kommun: null, region: null, staten: null };
   const fakeFlow = (entity: string, values: Record<string, number>): FlowYear => ({ year: '2025', values: { [entity]: values } });
 
-  it.each([15_000, 40_000, 120_000])('balanserar för %i kr/mån', (monthly) => {
-    const r = computeTax(monthly * 12, stockholm.rates['2026']!, rules);
-    const flows = {
-      kommun: fakeFlow('0180', { 'k-pedagogisk': 40, 'k-omsorg': 30, avskrivningar: 30 }),
-      region: fakeFlow(stockholm.region, { 'r-somatisk': 70, 'r-trafik': 30 }),
-      staten: fakeFlow('SE', { 'uo-06': 50, 'uo-ovriga': 50 }),
-    };
-    const { items } = buildItems(ds, rules, r, stockholm, flows, 1);
-    const leaves = items.filter((i) => i.role !== 'group');
-    const ins = leaves.filter((i) => i.side === 'in').reduce((a, i) => a + i.value, 0);
-    const outs = leaves.filter((i) => i.side === 'out').reduce((a, i) => a + i.value, 0);
-    expect(outs).toBeCloseTo(ins, 6);
-    expect(ins).toBeGreaterThanOrEqual(r.brutto + r.arbetsgivaravgiftTotalt - 1e-6);
-    for (const i of leaves) expect(i.value).toBeGreaterThanOrEqual(0);
+  const flowsFor = () => ({
+    kommun: fakeFlow('0180', { 'k-pedagogisk': 40, 'k-omsorg': 30, avskrivningar: 30 }),
+    region: fakeFlow(stockholm.region, { 'r-somatisk': 70, 'r-trafik': 30 }),
+    staten: fakeFlow('SE', { 'uo-06': 50, 'uo-ovriga': 50 }),
   });
 
-  it('visar skattereduktionerna som inflöde när statens netto är negativt', () => {
+  it.each([15_000, 40_000, 120_000])('balanserar per källa för %i kr/mån', (monthly) => {
+    const r = computeTax(monthly * 12, stockholm.rates['2026']!, rules);
+    const { items } = buildItems(ds, rules, r, stockholm, flowsFor(), 1);
+    const sources = items.filter((i) => i.side === 'in');
+    const receivers = items.filter((i) => i.side === 'out' && i.from);
+    // Varje källa fördelas helt på mottagarna
+    for (const src of sources) {
+      const sent = receivers.reduce((a, rcv) => a + (rcv.from?.[src.id] ?? 0), 0);
+      expect(sent).toBeCloseTo(src.value, 6);
+    }
+    // Varje mottagares bidrag = mottagarens värde (för grupper: summan av barnen)
+    for (const rcv of receivers) {
+      const received = Object.values(rcv.from!).reduce((a, v) => a + v, 0);
+      const value = rcv.role === 'group' ? items.filter((i) => i.parent === rcv.id).reduce((a, i) => a + i.value, 0) : rcv.value;
+      expect(received).toBeCloseTo(value, 6);
+    }
+    for (const i of items) expect(i.value).toBeGreaterThanOrEqual(-1e-9);
+    for (const rcv of receivers) for (const v of Object.values(rcv.from!)) expect(v).toBeGreaterThanOrEqual(-1e-9);
+  });
+
+  it('visar staten brutto och skattereduktionerna som egen källa till nettolönen', () => {
     const r = computeTax(25_000 * 12, stockholm.rates['2026']!, rules);
-    const { items, stateNet } = buildItems(ds, rules, r, stockholm, noFlows, 12);
-    expect(stateNet).toBeLessThan(0);
-    expect(items.find((i) => i.id === 'reduktion')?.value).toBeCloseTo(-stateNet / 12, 6);
-    expect(items.some((i) => i.id === 'g-staten')).toBe(false);
+    const { items, stateGross, reductions, stateNet } = buildItems(ds, rules, r, stockholm, noFlows, 12);
+    const staten = items.find((i) => i.id === 'g-staten')!;
+    expect(staten.from!.brutto! + staten.from!.ag!).toBeCloseTo(stateGross / 12, 6);
+    expect(staten.from!.ag!).toBeCloseTo((r.arbetsgivaravgifter.loneavgift! + r.alderspensionOverTak) / 12, 6);
+    expect(items.find((i) => i.id === 'reduktion')!.value).toBeCloseTo(reductions / 12, 6);
+    expect(items.find((i) => i.id === 'netto')!.from!.reduktion).toBeCloseTo((reductions - r.reduktionPension) / 12, 6);
+    expect(items.find((i) => i.id === 'g-pension')!.from!.reduktion).toBeCloseTo(r.reduktionPension / 12, 6);
+    expect(stateNet).toBeCloseTo(stateGross - reductions, 6);
+    expect(stateNet).toBeLessThan(0); // vid 25 000 kr/mån är reduktionerna större än statens intäkter
+  });
+
+  it('arbetsgivaravgiften finansierar pension och socialförsäkringar', () => {
+    const r = computeTax(40_000 * 12, stockholm.rates['2026']!, rules);
+    const { items } = buildItems(ds, rules, r, stockholm, noFlows, 1);
+    const pension = items.find((i) => i.id === 'g-pension')!;
+    expect(pension.from!.ag).toBeCloseTo(r.arbetsgivaravgifter.alderspension!, 6);
+    // Allmän pensionsavgift betalas via skattereduktionen – inget från bruttolönen
+    expect(pension.from!.brutto).toBeCloseTo(0, 6);
+    expect(pension.from!.reduktion).toBeCloseTo(r.reduktionPension, 6);
+    expect(r.reduktionPension).toBeCloseTo(r.pensionsavgift, 6);
+    // Bruttolönen går bara till kommun, region, nettolön och avgifter (ingen statlig skatt vid 40 000 kr/mån)
+    const fromBrutto = items.filter((i) => (i.from?.brutto ?? 0) > 1e-9).map((i) => i.id).sort();
+    expect(fromBrutto).toEqual(['avgifter', 'g-kommun', 'g-region', 'netto', 'publicservice']);
+    expect(items.find((i) => i.id === 'g-social')!.from!.brutto).toBeUndefined();
   });
 
   it('fördelar kommunens del efter budgetandelarna', () => {

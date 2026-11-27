@@ -20,23 +20,28 @@ import {
   fetchJson,
   readParam,
   SELECT_ENTITY_EVENT,
+  useCoarsePointer,
   useTheme,
   writeParams,
   type SelectEntityDetail,
   type Theme,
 } from './chart-shared';
-import { buildSankeyOption, layoutItems, pct, sankeySize, type SankeyItem } from './sankey-shared';
+import { buildSankeyOption, layoutItems, pct, sankeySize, WIDE_PX, type SankeyItem } from './sankey-shared';
 import KeyFigureRow from './KeyFigureRow';
 
 echarts.use([SankeyChart, TooltipComponent, SVGRenderer]);
 
 const kr = (v: number) => `${formatNumber(v, 0)} kr`;
 
-/** Färg per mottagare (barn ärver gruppens färg); in = serie 1, nettolön nedtonad. */
+/**
+ * Färg per mottagare (barn ärver gruppens färg; länkar från källorna färgas efter mottagaren), nettolön nedtonad.
+ * Källorna: bruttolön serie 1, arbetsgivaravgifter serie 8, skattereduktioner statens färg (serie 7).
+ */
 const GROUP_COLOR: Record<string, number> = { 'g-kommun': 2, 'g-region': 3, 'g-staten': 6, 'g-pension': 1, 'g-social': 4, avgifter: 5, publicservice: 5 };
+const SOURCE_COLOR: Record<string, number> = { brutto: 0, ag: 7, reduktion: 6 };
 function colorOf(it: SankeyItem, theme: Theme): string {
   if (it.role === 'balance') return theme.muted;
-  if (it.side === 'in') return theme.series[0]!;
+  if (it.side === 'in') return theme.series[SOURCE_COLOR[it.id] ?? 0]!;
   const idx = GROUP_COLOR[it.parent ?? it.id];
   return theme.series[idx ?? 1]!;
 }
@@ -46,6 +51,7 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
   const ref = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const theme = useTheme();
+  const coarse = useCoarsePointer();
   const latest = dataset.years[dataset.years.length - 1]!;
   const [year, setYear] = useState(latest);
   const [salaryText, setSalaryText] = useState(String(dataset.defaultSalary));
@@ -54,6 +60,7 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
   const [perYear, setPerYear] = useState(false);
   const [showTable, setShowTable] = useState(false);
   const [narrow, setNarrow] = useState(false);
+  const [wide, setWide] = useState(false);
   const [flows, setFlows] = useState<{ kommun: FlowYear | null; region: FlowYear | null; staten: FlowYear | null }>({
     kommun: null,
     region: null,
@@ -102,7 +109,7 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
     [dataset, rules, result, kommun, flows, divisor],
   );
   const layout = useMemo(() => layoutItems(built.items), [built]);
-  const { height, minWidth } = sankeySize(layout, narrow);
+  const { height, minWidth } = sankeySize(layout, narrow, wide);
   const total = layout.total;
   const marginal = useMemo(() => marginalTax(salary * 12, rates, rules, church), [salary, rates, rules, church]);
 
@@ -110,29 +117,35 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
     if (!ref.current || !theme || total <= 0) return;
     const chart = chartRef.current ?? echarts.init(ref.current, undefined, { renderer: 'svg' });
     chartRef.current = chart;
-    const isNarrow = (wrapRef.current?.clientWidth ?? 800) < 720;
+    const w = wrapRef.current?.clientWidth ?? 800;
+    const isNarrow = w < 720;
+    const isWide = w >= WIDE_PX;
     setNarrow(isNarrow);
+    setWide(isWide);
     chart.setOption(
       buildSankeyOption({
-        title: perYear ? 'Arbetsgivarens kostnad per år' : 'Arbetsgivarens kostnad per månad',
+        title: perYear ? 'Per år' : 'Per månad',
         layout,
         theme,
         narrow: isNarrow,
+        wide: isWide,
         fmt: kr,
-        shareLabels: { in: 'Andel av arbetsgivarens kostnad', out: 'Andel av arbetsgivarens kostnad' },
+        shareLabels: { in: 'Andel av inflödet', out: 'Andel av inflödet' },
         colorOf,
+        interactive: !coarse,
       }),
       true,
     );
     chart.resize();
     const ro = new ResizeObserver(() => {
       chart.resize();
-      const n = (wrapRef.current?.clientWidth ?? 800) < 720;
-      if (n !== isNarrow) setNarrow(n);
+      const cw = wrapRef.current?.clientWidth ?? 800;
+      if (cw < 720 !== isNarrow) setNarrow(cw < 720);
+      if (cw >= WIDE_PX !== isWide) setWide(cw >= WIDE_PX);
     });
     ro.observe(ref.current);
     return () => ro.disconnect();
-  }, [layout, total, theme, narrow, height, perYear]);
+  }, [layout, total, theme, narrow, wide, height, perYear, coarse]);
 
   useEffect(() => () => chartRef.current?.dispose(), []);
 
@@ -163,6 +176,13 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
       decimals: 1,
       hint: 'Din skatt plus arbetsgivaravgifterna, delat med lön + arbetsgivaravgifter',
     },
+    {
+      key: 'staten',
+      label: 'Statens netto (efter skattereduktioner)',
+      value: built.stateNet / divisor,
+      unit: 'kr',
+      hint: 'Statlig skatt + allmän löneavgift + ålderspensionsavgift över taket − skattereduktioner. Negativt = staten bidrar netto.',
+    },
     { key: 'marginal', label: 'Marginalskatt', value: marginal * 100, unit: '%', decimals: 0, hint: 'Andel av en löneökning som går till skatt' },
     {
       key: 'kommunalskatt',
@@ -184,19 +204,28 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
   };
 
   const labelOf = new Map(layout.items.map((i) => [i.id, i.label]));
+  const sources = layout.items.filter((i) => i.side === 'in');
+  const receivers = layout.items.filter((i) => i.side === 'out' && i.from);
   const csv = () => {
     downloadCsv(
       `skatt-${kommun.code}-${salary}-${year}.csv`,
-      ['Riktning', 'Grupp', 'Post', `Belopp (kr per ${per})`, 'Andel (%)'],
-      layout.items
-        .filter((i) => i.role !== 'group')
-        .map((i) => [
-          i.side === 'in' ? 'Inflöde' : 'Utflöde',
-          i.parent ? (labelOf.get(i.parent) ?? '') : '',
-          i.label,
-          Math.round(i.value),
-          total ? Math.round((i.value / total) * 1000) / 10 : null,
-        ]),
+      ['Steg', 'Från', 'Till', `Belopp (kr per ${per})`, 'Andel (%)'],
+      [
+        ...receivers.flatMap((rcv) =>
+          Object.entries(rcv.from ?? {})
+            .filter(([, v]) => v > 0)
+            .map(([src, v]) => ['Källa → mottagare', labelOf.get(src) ?? src, rcv.label, Math.round(v), total ? Math.round((v / total) * 1000) / 10 : null]),
+        ),
+        ...layout.items
+          .filter((i) => i.side === 'out' && i.parent)
+          .map((i) => [
+            'Mottagare → användning',
+            labelOf.get(i.parent!) ?? '',
+            i.label,
+            Math.round(i.value),
+            total ? Math.round((i.value / total) * 1000) / 10 : null,
+          ]),
+      ],
       `Bruttolön ${salary} kr/mån, ${kommun.name} ${year}. Beräkning enligt Skatteverkets regler; fördelning efter budgetandelar (SCB, Statskontoret).`,
     );
   };
@@ -260,15 +289,29 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
 
       {error && <p className="viz-status">Kunde inte ladda budgetandelar: {error}</p>}
       {salary === 0 && <p className="viz-status">Ange en bruttolön för att se fördelningen.</p>}
+      {total > 0 && (
+        <p className="taxcalc__lead">
+          Till vänster det som betalas för din lön: bruttolönen, arbetsgivaravgifterna och skattereduktionerna som staten
+          står för. Strömmarna visar vart varje källa tar vägen – och i nästa steg vad mottagarna i genomsnitt använder
+          pengarna till (skatter är inte öronmärkta, så fördelningen följer mottagarens budget).
+        </p>
+      )}
       <div className="flow__scroll">
         <div
           ref={ref}
-          style={{ height, width: '100%', minWidth, display: total > 0 ? 'block' : 'none' }}
+          style={{
+            height,
+            width: '100%',
+            minWidth,
+            display: total > 0 ? 'block' : 'none',
+            pointerEvents: coarse ? 'none' : undefined,
+          }}
           role="img"
           aria-label={`Sankey-diagram: lön ${formatNumber(salary)} kr per månad i ${kommun.name}. Skatt ${kr(result.skatt / 12)} per månad. Visa tabellen för alla poster.`}
         />
       </div>
 
+      {coarse && total > 0 && <p className="flow__static">Diagrammet är statiskt på mobil – visa tabellen för alla belopp.</p>}
       <div className="chart__actions">
         <button type="button" className="btn" aria-expanded={showTable} onClick={() => setShowTable((v) => !v)}>
           {showTable ? 'Dölj tabell' : 'Visa som tabell'}
@@ -291,29 +334,40 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
               </tr>
             </thead>
             <tbody>
-              {(
-                [
-                  ['Arbetsgivarens kostnad', 'in'],
-                  ['Vart pengarna går', 'out'],
-                ] as const
-              ).map(([title, side]) => (
-                <Fragment key={side}>
-                  <tr>
-                    <th scope="rowgroup" colSpan={3} className="flow__group">
-                      {title}
+              {sources.map((src) => (
+                <Fragment key={src.id}>
+                  <tr className="flow__subtotal">
+                    <th scope="rowgroup" className="flow__group">
+                      Från {src.label.toLowerCase()}
                     </th>
+                    <td className="flow__group">{kr(src.value)}</td>
+                    <td className="flow__group">{pct(src.value, total)}</td>
                   </tr>
-                  {layout.items
-                    .filter((i) => i.side === side)
-                    .map((i) => (
-                      <tr key={i.id} className={i.role === 'group' ? 'flow__subtotal' : i.parent ? 'flow__child' : undefined}>
-                        <th scope="row">{i.label}</th>
-                        <td>{kr(i.value)}</td>
-                        <td>{pct(i.value, total)}</td>
+                  {receivers
+                    .filter((rcv) => (rcv.from?.[src.id] ?? 0) > 0)
+                    .map((rcv) => (
+                      <tr key={`${src.id}-${rcv.id}`} className="flow__child">
+                        <th scope="row">{rcv.label}</th>
+                        <td>{kr(rcv.from![src.id]!)}</td>
+                        <td>{pct(rcv.from![src.id]!, total)}</td>
                       </tr>
                     ))}
                 </Fragment>
               ))}
+              <tr>
+                <th scope="rowgroup" colSpan={3} className="flow__group">
+                  Vad mottagarna använder pengarna till
+                </th>
+              </tr>
+              {layout.items
+                .filter((i) => i.side === 'out')
+                .map((i) => (
+                  <tr key={i.id} className={i.role === 'group' ? 'flow__subtotal' : i.parent ? 'flow__child' : undefined}>
+                    <th scope="row">{i.label}</th>
+                    <td>{kr(i.value)}</td>
+                    <td>{pct(i.value, total)}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
           <p className="flow__pop">
@@ -332,6 +386,8 @@ export default function TaxSankey({ dataset }: { dataset: TaxCalculatorDataset }
         .chart__table .flow__subtotal th, .chart__table .flow__subtotal td { font-weight: 600; }
         .chart__table .flow__child th { padding-left: 24px; font-weight: 400; }
         .flow__pop { font-size: 0.8rem; color: var(--text-secondary); margin: 6px 0 0; }
+        .taxcalc__lead { font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 8px; max-width: 75ch; }
+        .flow__static { font-size: 0.8rem; color: var(--text-secondary); margin: 6px 0 0; }
       `}</style>
     </div>
   );

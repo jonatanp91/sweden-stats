@@ -18,11 +18,12 @@ import {
   fetchJson,
   readParam,
   SELECT_ENTITY_EVENT,
+  useCoarsePointer,
   useTheme,
   writeParams,
   type SelectEntityDetail,
 } from './chart-shared';
-import { buildSankeyOption, layoutItems, pct, sankeySize, type SankeyItem } from './sankey-shared';
+import { buildSankeyOption, layoutItems, pct, sankeySize, WIDE_PX, type SankeyItem } from './sankey-shared';
 import KeyFigureRow from './KeyFigureRow';
 
 echarts.use([SankeyChart, TooltipComponent, SVGRenderer]);
@@ -36,6 +37,7 @@ export default function FlowSankey({ dataset }: { dataset: FlowDataset }) {
   const ref = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const theme = useTheme();
+  const coarse = useCoarsePointer();
   const latest = dataset.years[dataset.years.length - 1]!;
   const yearParam = `${dataset.entityParam}-ar`;
   const [entity, setEntity] = useState(dataset.defaultEntity);
@@ -44,6 +46,7 @@ export default function FlowSankey({ dataset }: { dataset: FlowDataset }) {
   const [error, setError] = useState<string | null>(null);
   const [showTable, setShowTable] = useState(false);
   const [narrow, setNarrow] = useState(false);
+  const [wide, setWide] = useState(false);
 
   // Startval från URL:en
   useEffect(() => {
@@ -84,35 +87,41 @@ export default function FlowSankey({ dataset }: { dataset: FlowDataset }) {
     return layoutItems(items);
   }, [dataset, data, entity]);
   const { total } = layout;
-  const { height, minWidth } = sankeySize(layout, narrow);
+  const { height, minWidth } = sankeySize(layout, narrow, wide);
 
   useEffect(() => {
     if (!ref.current || !theme || !data || total === 0) return;
     const chart = chartRef.current ?? echarts.init(ref.current, undefined, { renderer: 'svg' });
     chartRef.current = chart;
-    const isNarrow = (wrapRef.current?.clientWidth ?? 800) < 720;
+    const w = wrapRef.current?.clientWidth ?? 800;
+    const isNarrow = w < 720;
+    const isWide = w >= WIDE_PX;
     setNarrow(isNarrow);
+    setWide(isWide);
     chart.setOption(
       buildSankeyOption({
         title: entityName,
         layout,
         theme,
         narrow: isNarrow,
+        wide: isWide,
         fmt: formatMnkr,
         extra: pop ? (v) => `${formatKr(perCapita(v, pop))}/inv` : undefined,
         shareLabels: { in: 'Andel av intäkterna', out: 'Andel av utgifterna' },
+        interactive: !coarse,
       }),
       true,
     );
     chart.resize();
     const ro = new ResizeObserver(() => {
       chart.resize();
-      const n = (wrapRef.current?.clientWidth ?? 800) < 720;
-      if (n !== isNarrow) setNarrow(n);
+      const cw = wrapRef.current?.clientWidth ?? 800;
+      if (cw < 720 !== isNarrow) setNarrow(cw < 720);
+      if (cw >= WIDE_PX !== isWide) setWide(cw >= WIDE_PX);
     });
     ro.observe(ref.current);
     return () => ro.disconnect();
-  }, [data, entityName, layout, total, pop, theme, narrow, height]);
+  }, [data, entityName, layout, total, pop, theme, narrow, wide, height, coarse]);
 
   useEffect(() => () => chartRef.current?.dispose(), []);
 
@@ -215,12 +224,20 @@ export default function FlowSankey({ dataset }: { dataset: FlowDataset }) {
       <div className="flow__scroll">
         <div
           ref={ref}
-          style={{ height, width: '100%', minWidth, display: total === 0 ? 'none' : 'block' }}
+          style={{
+            height,
+            width: '100%',
+            minWidth,
+            display: total === 0 ? 'none' : 'block',
+            // Statiskt på pekskärm: gesterna går till scrollbehållaren i stället för diagrammet
+            pointerEvents: coarse ? 'none' : undefined,
+          }}
           role="img"
           aria-label={`Sankey-diagram: ${entityName} ${year}. Intäkter ${formatMnkr(total)}. Visa tabellen för alla poster.`}
         />
       </div>
 
+      {coarse && total > 0 && <p className="flow__static">Diagrammet är statiskt på mobil – visa tabellen för alla belopp.</p>}
       <div className="chart__actions">
         <button type="button" className="btn" aria-expanded={showTable} onClick={() => setShowTable((v) => !v)}>
           {showTable ? 'Dölj tabell' : 'Visa som tabell'}
@@ -286,6 +303,7 @@ export default function FlowSankey({ dataset }: { dataset: FlowDataset }) {
         .chart__table .flow__subtotal th, .chart__table .flow__subtotal td { font-weight: 600; }
         .chart__table .flow__child th { padding-left: 24px; font-weight: 400; }
         .flow__pop { font-size: 0.8rem; color: var(--text-secondary); margin: 6px 0 0; }
+        .flow__static { font-size: 0.8rem; color: var(--text-secondary); margin: 6px 0 0; }
       `}</style>
     </div>
   );

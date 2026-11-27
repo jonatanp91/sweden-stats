@@ -23,14 +23,15 @@
       "updated": "2026-08-28T06:00:00Z"
     }
   ],
-  "fetchedAt": "2026-11-25T07:19:46.246Z",
+  "fetchedAt": "2026-11-27T15:16:41.140Z",
   "notes": [
     "Bygger på regionens resultaträkning (exklusive regionala bolag). Alla belopp i löpande priser.",
     "Verksamhetens kostnader fördelas efter respektive verksamhetsområdes andel av bruttokostnaderna. Serviceverksamheter (t.ex. fastighetsförvaltning och medicinsk service) är interna och fördelas därför inte som eget område.",
     "Verksamhetens intäkter omfattar bl.a. patientavgifter, riktade statsbidrag (t.ex. för läkemedel) och försäljning av vård.",
     "Region Gotland är både kommun och region; SCB uppskattar att 35 % av verksamheten avser regionuppgifter.",
     "Mellansteget \"Hälso- och sjukvård\" omfattar SCB:s verksamhetsområden 0–4 (primärvård, somatisk och psykiatrisk specialistvård, tandvård, övrig hälso- och sjukvård). Avskrivningar och finansiella kostnader kan inte fördelas per verksamhet och redovisas under \"Övrig verksamhet och finansiering\".",
-    "Belopp per invånare beräknas med folkmängden den 31 december (summan av länets kommuner, SCB TAB6574)."
+    "Belopp per invånare beräknas med folkmängden den 31 december (summan av länets kommuner, SCB TAB6574).",
+    "Skatteintäkterna är bokförda enligt kommunal redovisning: årets preliminära kommunalskatt plus prognos för slutavräkningen. De ligger därför nära skatten på årets inkomster och skiljer sig från statens utbetalning av kommunalskatt under året i statens budgetdiagram (inkomsttitel 1811), som bygger på en prognos för skatteunderlaget och innehåller avräkningar för tidigare år."
   ],
   "kind": "flow",
   "unit": "mnkr",

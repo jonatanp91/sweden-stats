@@ -136,7 +136,13 @@ Sidan genereras automatiskt och visas som "Planerad" tills den har dataset. Sakn
 Serier kan ha `role: 'muted'` (nedtonad, t.ex. brusiga årsvärden bakom ett glidande medel).
 Karta: `kind: 'regional'` → `RegionMap.tsx` (kommunnivå; geometri för län/regioner finns inte ännu).
 Sankey: `kind: 'flow'` → `FlowSankey.tsx` (färg efter roll: intäkter blå, kostnader orange, saldo grå).
-Skattekalkylator: `kind: 'calculator'` → `TaxSankey.tsx` (färg per mottagare; nettolön grå).
+Skattekalkylator: `kind: 'calculator'` → `TaxSankey.tsx` (färg per mottagare; nettolön grå). Den saknar mittnod:
+mottagarna har `from` (källa → belopp), så länkarna går direkt från bruttolön, arbetsgivaravgifter och
+skattereduktioner till mottagarna (`sankey-shared.ts` ritar då inget centrum).
+På pekskärmar (`useCoarsePointer()` i `chart-shared.ts`) är Sankey-diagrammen statiska: ingen tooltip, och
+`pointer-events: none` så att sidan och sidledsscrollen fungerar. Tabellvyn har alla belopp.
+Bredd: alla kort följer textkolumnen (1120 px). Ett försök med bredare Sankey-/kartkort återtogs (B-016).
+Från 1300 px diagrambredd skulle etiketterna ritas på en rad (`WIDE_PX`), men det slår inte in vid nuvarande bredd.
 
 ## Status
 
@@ -146,7 +152,7 @@ Skattekalkylator: `kind: 'calculator'` → `TaxSankey.tsx` (färg per mottagare;
 | Klimat & väder | `klimat-temperatur-lund` | SMHI metobs param 22, station 53430 |
 | Utsläpp & miljö | `utslapp-vaxthusgaser-sektor` | SCB TAB4698 (Naturvårdsverket) |
 | El | `el-produktion-kraftslag`, `el-produktion-manad` | SCB TAB5644 (Energimyndigheten) |
-| Skatter & offentliga finanser | `skatter-kalkylator` (skattekalkylator), `skatter-kommuner` (karta), `skatter-kommun-flode`, `skatter-region-flode`, `skatter-staten-flode` (Sankey med nyckeltal och kr/inv), `skatter-statsskuld`, `skatter-skuld-bnp`, `skatter-kommunalskatt-riket` | SCB TAB2017, TAB2015, TAB6777, TAB4201, TAB4199, TAB6784, TAB4242, TAB6574, TAB4365, TAB6378 (Riksgälden), TAB5050, TAB121; Statskontoret årsutfall (statsbudgeten); Skatteverket (skattesatser, regler, skattetabeller); geometri SCB RegSO |
+| Skatter & offentliga finanser | `skatter-kalkylator` (skattekalkylator), `skatter-kommuner` (karta), `skatter-kommun-flode`, `skatter-region-flode`, `skatter-staten-flode` (Sankey med nyckeltal och kr/inv), `skatter-staten-utgifter` (utgiftsområden i % av BNP), `skatter-skattekvot` (skattetryck per skattetyp), `skatter-statsskuld`, `skatter-skuld-bnp`, `skatter-kommunalskatt-riket` | SCB TAB2017, TAB2015, TAB6777, TAB4201, TAB4199, TAB6784, TAB4242, TAB6574, TAB4365, TAB6378 (Riksgälden), TAB5050, TAB121; Statskontoret årsutfall (statsbudgeten); Skatteverket (skattesatser, regler, skattetabeller); geometri SCB RegSO |
 | Övriga 11 kategorier | – (planerade, med idéer och källor) | – |
 
 Statens Sankey (`scripts/datasets/staten.ts`, `scripts/lib/statskontoret.ts`) visar skatterna **brutto** (ägarens
@@ -163,4 +169,4 @@ jobbskatteavdragets parametrar) står i skriptet per inkomstår med källa. **Ny
 `npm run fetch -- skattekalkyl` – hämtaren stoppar om beräkningen avviker mer än 2 kr/mån från Skatteverkets
 skattetabeller. Hämtaren läser flödesdataseten, så `skatter` och `staten` måste ha körts först.
 
-**Nästa steg (förslag):** publicering (GitHub Pages via Actions + schemalagd datauppdatering), Svenska kraftnät-data (timvis el per elområde), valresultat, BNP/inflation (SCB/Riksbanken), skattekvot över tid (SCB TAB121), kalkylatorn för fler inkomstår och för pensionärer (66+).
+**Nästa steg (förslag):** publicering (GitHub Pages via Actions + schemalagd datauppdatering), Svenska kraftnät-data (timvis el per elområde), valresultat, BNP/inflation (SCB/Riksbanken), kommunernas skulder och investeringar per invånare, kalkylatorn för fler inkomstår och för pensionärer (66+).

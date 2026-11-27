@@ -88,23 +88,21 @@ export const categories: Category[] = [
     slug: 'skatter',
     name: 'Skatter & offentliga finanser',
     description:
-      'Kommunalskatt, kommunernas, regionernas och statens budgetar, och statsskulden. Räkna ut vart din egen skatt går, utforska din kommun på kartan och se vart skattepengarna tar vägen.',
+      'Kommunalskatt, kommunernas, regionernas och statens budgetar, skattetrycket och statsskulden. Räkna ut vart din egen skatt går, utforska din kommun på kartan och se vart skattepengarna tar vägen.',
     datasets: [
       'skatter-kalkylator',
       'skatter-kommuner',
       'skatter-kommun-flode',
       'skatter-region-flode',
       'skatter-staten-flode',
+      'skatter-staten-utgifter',
+      'skatter-skattekvot',
       'skatter-statsskuld',
       'skatter-skuld-bnp',
       'skatter-kommunalskatt-riket',
     ],
     sources: ['scb', 'statskontoret', 'riksgalden', 'skatteverket'],
-    ideas: [
-      'Statens utgifter per utgiftsområde över tid',
-      'Skattetryck: skatternas andel av BNP över tid',
-      'Kommunernas skulder och investeringar per invånare',
-    ],
+    ideas: [],
   },
   {
     slug: 'arbetsmarknad',

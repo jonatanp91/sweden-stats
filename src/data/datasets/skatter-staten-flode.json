@@ -53,13 +53,14 @@
       "apiUrl": "https://statistikdatabasen.scb.se/api/v2/tables/TAB121/data?lang=sv&outputFormat=json-stat2&valueCodes[Skattetyp]=101&valueCodes[ContentsCode]=000000T8&valueCodes[Tid]=*",
       "tableId": "TAB121",
       "license": "CC0 1.0 (SCB öppna data)",
-      "updated": "2026-08-28T06:00:00Z"
+      "updated": "2026-11-27T07:00:00Z"
     }
   ],
-  "fetchedAt": "2026-11-25T07:02:59.221Z",
+  "fetchedAt": "2026-11-27T15:25:11.248Z",
   "notes": [
     "Bruttoperspektiv: skatterna visas som staten tar in dem. En stor del – den kommunala inkomstskatten till kommuner och regioner, avgifterna till pensionssystemet och tullar till EU – förs direkt vidare och visas som \"Skatter som förs vidare\". Statsbudgetens egna inkomster är summan efter den posten.",
     "Den kommunala inkomstskatten redovisas som en post (inkomsttitel 1811). Uppdelningen på kommuner och regioner följer riksgenomsnittets skattesatser samma år (SCB TAB2015) och är därför en uppskattning.",
+    "Kommunalskatten till kommuner och regioner är det staten betalade ut under året (2025: 984 mdkr). Den kommunala inkomstskatten på årets inkomster var 959 mdkr (inkomsttitel 1115). Skillnaden beror på att utbetalningarna är preliminära – de bygger på en prognos för skatteunderlaget – och att avräkningen mot den slutliga skatten görs två år senare. Kommunernas och regionernas egna bokslut (deras budgetdiagram) ligger nära den faktiska skatten.",
     "\"Statsbudgetens utgifter\" omfattar utgiftsområdena, Riksgäldens nettoutlåning och kassamässig korrigering när de är positiva. Avräkningar och stöd via skattekontot hör till inkomstsidan och visas för sig.",
     "Belopp per invånare beräknas med folkmängden i riket den 31 december (SCB TAB4365). Statsskulden avser december respektive år (Riksgälden via SCB TAB6378) och BNP löpande priser (SCB TAB121).",
     "Budgetsaldot = statsbudgetens inkomster minus utgifter (utgiftsområden, Riksgäldens nettoutlåning och kassamässig korrigering). Ålderspensionssystemet ligger vid sidan av statens budget och ingår inte.",
@@ -193,14 +194,14 @@
       "label": "Kommunalskatt till kommunerna",
       "side": "out",
       "parent": "g-vidareforing",
-      "description": "Den kommunala inkomstskattens kommundel (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)"
+      "description": "Den kommunala inkomstskattens kommundel som staten betalat ut under året – preliminärt belopp efter prognos plus avräkning för tidigare år (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)"
     },
     {
       "id": "vf-regioner",
       "label": "Kommunalskatt till regionerna",
       "side": "out",
       "parent": "g-vidareforing",
-      "description": "Den kommunala inkomstskattens regiondel (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)"
+      "description": "Den kommunala inkomstskattens regiondel som staten betalat ut under året – preliminärt belopp efter prognos plus avräkning för tidigare år (inkomsttitel 1811, fördelad efter riksgenomsnittets skattesatser)"
     },
     {
       "id": "vf-pension",

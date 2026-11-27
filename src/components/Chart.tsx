@@ -16,7 +16,26 @@ import { useTheme, type Theme } from './chart-shared';
 
 echarts.use([LineChart, BarChart, GridComponent, TooltipComponent, LegendComponent, DataZoomComponent, SVGRenderer]);
 
-function buildOption(ds: Dataset, axis: string[], theme: Theme, narrow: boolean): EChartsCoreOption {
+/**
+ * Uppskattat antal rader som legenden radbryts på (ECharts radbryter själv men flyttar inte ritytan).
+ * Bredd per post ≈ ikon + mellanrum + text (13 px, ca 7 px per tecken) + itemGap.
+ */
+function legendRows(labels: string[], width: number): number {
+  let rows = 1;
+  let x = 0;
+  for (const l of labels) {
+    const w = 12 + 5 + l.length * 7 + 16;
+    if (x > 0 && x + w > width) {
+      rows++;
+      x = 0;
+    }
+    x += w;
+  }
+  return rows;
+}
+
+function buildOption(ds: Dataset, axis: string[], theme: Theme, width: number): EChartsCoreOption {
+  const narrow = width < 560;
   const { type } = ds.chart;
   const stacked = isStacked(ds);
   const bar = type === 'bar' || type === 'stacked-bar';
@@ -95,7 +114,7 @@ function buildOption(ds: Dataset, axis: string[], theme: Theme, narrow: boolean)
     grid: {
       left: 8,
       right: 16,
-      top: multi ? (narrow ? 76 : 48) : 16,
+      top: multi ? Math.max(narrow ? 76 : 48, legendRows(ds.series.map((s) => s.label), width) * 22 + 26) : 16,
       bottom: long ? 64 : 8,
       containLabel: true,
     },
@@ -223,14 +242,16 @@ export default function Chart({ dataset, height = 360 }: { dataset: Dataset; hei
     if (!ref.current || !theme) return;
     const chart = chartRef.current ?? echarts.init(ref.current, undefined, { renderer: 'svg' });
     chartRef.current = chart;
-    const render = () => chart.setOption(buildOption(dataset, axis, theme, ref.current!.clientWidth < 560), true);
+    // Rita om när bredden ändrar layouten (smal skärm eller antal legendrader)
+    const layoutKey = (w: number) => `${w < 560}|${legendRows(dataset.series.map((s) => s.label), w)}`;
+    const render = () => chart.setOption(buildOption(dataset, axis, theme, ref.current!.clientWidth), true);
     render();
-    let lastNarrow = ref.current.clientWidth < 560;
+    let lastKey = layoutKey(ref.current.clientWidth);
     const ro = new ResizeObserver(() => {
       chart.resize();
-      const narrow = (ref.current?.clientWidth ?? 0) < 560;
-      if (narrow !== lastNarrow) {
-        lastNarrow = narrow;
+      const key = layoutKey(ref.current?.clientWidth ?? 0);
+      if (key !== lastKey) {
+        lastKey = key;
         render();
       }
     });

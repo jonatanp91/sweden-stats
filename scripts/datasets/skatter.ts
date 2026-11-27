@@ -37,6 +37,10 @@ import {
 const FIRST_YEAR = 2010;
 const RR_CODES = ['010', '022', '030', '035', '040', '060', '072', '080', '120'];
 
+/** Varför skatteintäkterna här inte är exakt samma som kommunalskatten i statens budgetdiagram. */
+const MUNICIPAL_TAX_NOTE =
+  'Skatteintäkterna är bokförda enligt kommunal redovisning: årets preliminära kommunalskatt plus prognos för slutavräkningen. De ligger därför nära skatten på årets inkomster och skiljer sig från statens utbetalning av kommunalskatt under året i statens budgetdiagram (inkomsttitel 1811), som bygger på en prognos för skatteunderlaget och innehåller avräkningar för tidigare år.';
+
 function source(js: JsonStat2, apiUrl: string, tableId: string, name: string): Source {
   return { org: 'SCB', name, url: scbProductUrl(js), apiUrl, tableId, license: SCB_LICENSE, updated: js.updated };
 }
@@ -275,6 +279,7 @@ export const skatter: Fetcher = {
           'Kommuner som betalar netto till det kommunalekonomiska utjämningssystemet visar en "Avgift till utjämningssystemet" bland utgifterna.',
           'Ett överskott (eller underskott) balanserar flödet så att intäkter och kostnader blir lika stora.',
           'Belopp per invånare beräknas med folkmängden den 31 december samma år (SCB TAB6574). Nyckeltalen är desamma som i kartan ovan.',
+          MUNICIPAL_TAX_NOTE,
         ],
         unit: 'mnkr',
         entityLabel: 'Kommun',
@@ -362,6 +367,7 @@ export const skatter: Fetcher = {
           'Region Gotland är både kommun och region; SCB uppskattar att 35 % av verksamheten avser regionuppgifter.',
           'Mellansteget "Hälso- och sjukvård" omfattar SCB:s verksamhetsområden 0–4 (primärvård, somatisk och psykiatrisk specialistvård, tandvård, övrig hälso- och sjukvård). Avskrivningar och finansiella kostnader kan inte fördelas per verksamhet och redovisas under "Övrig verksamhet och finansiering".',
           'Belopp per invånare beräknas med folkmängden den 31 december (summan av länets kommuner, SCB TAB6574).',
+          MUNICIPAL_TAX_NOTE,
         ],
         unit: 'mnkr',
         entityLabel: 'Region',

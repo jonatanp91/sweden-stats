@@ -100,5 +100,45 @@ Det finns inget API för skattereglerna (grundavdrag, jobbskatteavdrag m.m.), ba
 formlerna ligger i `src/lib/tax.ts`. Hämtaren jämför beräkningen med Skatteverkets skattetabeller (öppna data) för
 alla inkomstskikt upp till 200 000 kr/mån i fyra tabeller och stoppar vid mer än 2 kr/mån i avvikelse.
 Kalkylatorns andra steg fördelar kommunens/regionens/statens del proportionellt efter deras senaste budgetutfall.
-Skattereduktionerna redovisas som statens kostnad (kommunerna får hela kommunalskatten); blir statens netto negativt
-visas det som ett inflöde. Moms ingår inte (ägarens val).
+Skattereduktionerna redovisas som statens kostnad (kommunerna får hela kommunalskatten). Moms ingår inte (ägarens val).
+(Visningen av staten ändrades i B-014.)
+
+## B-014 Kalkylatorn visar källorna var för sig, staten brutto (2026-11-27)
+
+Ägaren ville se vad som betalas av bruttolönen respektive arbetsgivaravgifterna (pension och socialförsäkringar
+finansieras direkt av arbetsgivaravgiften).
+**Beslut:** Kalkylatorns Sankey saknar mittnod. Mottagarna har `from` (källa → belopp): bruttolön → nettolön,
+kommun, region, statlig skatt, allmän pensionsavgift, avgifter; arbetsgivaravgifter → ålderspension, socialförsäkringar,
+allmän löneavgift och ålderspensionsavgift över taket (staten). Staten visas **brutto** (ägarens val); skattereduktionerna
+blir en egen källa, och statens netto visas som nyckeltal. Den allmänna pensionsavgiften (7 %) visas som finansierad av
+skattereduktionen för pensionsavgift (skattereduktioner → pension), eftersom den kompenseras fullt; övriga reduktioner
+(jobbskatteavdrag, förvärvsinkomst) går till nettolönen. Allmän löneavgift är en skatt till statsbudgeten och fördelas i
+steg 2 proportionellt efter utgiftsområden (illustration, ingen öronmärkning).
+
+## B-015 Statiska Sankey-diagram på pekskärmar (2026-11-27)
+
+På telefon fångade ECharts pekgesterna, så sidan och de breda diagrammen var svåra att scrolla.
+**Beslut:** När `(hover: none) and (pointer: coarse)` matchar ritas Sankey-diagrammen utan interaktivitet
+(`silent`, ingen tooltip) och med `pointer-events: none`, så att gesterna går till sidan och scrollbehållaren.
+Etiketterna visar belopp och andel; tabellvyn har alla detaljer.
+
+## B-016 Bredare Sankey-diagram och kartor på datorskärmar (2026-11-27)
+
+Sidans textkolumn är 1120 px, vilket gjorde de stora Sankey-diagrammen trånga på breda skärmar.
+**Beslut:** Kort med Sankey eller karta bryter ut ur textkolumnen på skärmar ≥ 1240 px (`.dataset--wide` i
+`DatasetCard.astro`, upp till 1760 px, centrerat). Rubriker och text i kortet behåller sin läsbara radlängd.
+När diagrammet är minst 1300 px brett ritas etiketterna på en rad i stället för två (`WIDE_PX` i `sankey-shared.ts`).
+Linjediagram behåller textkolumnens bredd.
+
+**Återtaget samma dag:** ägaren föredrog den tidigare bredden. Alla kort följer åter textkolumnen (1120 px).
+Logiken för etiketter på en rad (`WIDE_PX`) finns kvar men slår inte in vid nuvarande kolumnbredd.
+
+## B-017 Statens diagram visar utbetald kommunalskatt (2026-11-27)
+
+Statens Sankey visade 629 + 355 mdkr till kommuner och regioner 2025, medan deras egna resultaträkningar visar
+614 + 349 mdkr. Orsaken: inkomsttitel 1811 är statens utbetalning under året (preliminär, efter prognos för
+skatteunderlaget, plus slutavräkning för tidigare år), medan kommunerna bokför årets skatt inklusive prognos för
+slutavräkningen – nära titel 1115 (skatten på årets inkomster, 959 mdkr).
+**Beslut (ägarens val):** behåll utbetalningen (1811) i statens diagram – det är vad statsbudgeten redovisar – och
+förklara skillnaden i noter (staten: med årets belopp för 1811 och 1115; kommun/region: allmän notering) och i
+nodernas tooltip.

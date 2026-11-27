@@ -32,14 +32,15 @@
       "updated": "2026-08-28T06:00:00Z"
     }
   ],
-  "fetchedAt": "2026-11-25T07:19:46.246Z",
+  "fetchedAt": "2026-11-27T15:16:41.140Z",
   "notes": [
     "Bygger på kommunens resultaträkning (exklusive kommunala bolag). Alla belopp i löpande priser.",
     "Verksamhetens kostnader fördelas på verksamhetsområden efter respektive områdes andel av bruttokostnaderna i driftredovisningen. Driftredovisningen innehåller interna poster och summerar därför inte exakt till resultaträkningen; andelarna används bara för fördelningen.",
     "Verksamhetens intäkter delas upp enligt SCB:s kontoposter; det som inte ryms i de redovisade grupperna visas som \"Övriga verksamhetsintäkter\". I de få fall där kontoposterna summerar till mer än resultaträkningens intäkter (främst Region Gotland, som redovisar både kommun- och regionuppgifter) skalas uppdelningen proportionellt.",
     "Kommuner som betalar netto till det kommunalekonomiska utjämningssystemet visar en \"Avgift till utjämningssystemet\" bland utgifterna.",
     "Ett överskott (eller underskott) balanserar flödet så att intäkter och kostnader blir lika stora.",
-    "Belopp per invånare beräknas med folkmängden den 31 december samma år (SCB TAB6574). Nyckeltalen är desamma som i kartan ovan."
+    "Belopp per invånare beräknas med folkmängden den 31 december samma år (SCB TAB6574). Nyckeltalen är desamma som i kartan ovan.",
+    "Skatteintäkterna är bokförda enligt kommunal redovisning: årets preliminära kommunalskatt plus prognos för slutavräkningen. De ligger därför nära skatten på årets inkomster och skiljer sig från statens utbetalning av kommunalskatt under året i statens budgetdiagram (inkomsttitel 1811), som bygger på en prognos för skatteunderlaget och innehåller avräkningar för tidigare år."
   ],
   "kind": "flow",
   "unit": "mnkr",
