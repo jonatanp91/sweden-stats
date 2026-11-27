@@ -9,7 +9,7 @@ const root = fileURLToPath(new URL('.', import.meta.url)).replace(/^[a-z]:/, (d)
 
 // Publicering (GitHub Pages, .github/workflows/deploy.yml): arbetsflödet sätter SITE_URL och BASE_PATH,
 // t.ex. https://<användare>.github.io och /sweden-stats. Lokalt är de tomma → sajten ligger i roten.
-// All intern länkning går via `url()` i src/lib/url.ts så att `base` fungerar. Se docs/beslut.md B-014.
+// All intern länkning går via `url()` i src/lib/url.ts så att `base` fungerar. Se docs/beslut.md B-018.
 export default defineConfig({
   root,
   site: process.env.SITE_URL || undefined,
